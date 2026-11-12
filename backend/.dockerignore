@@ -1,0 +1,46 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Environments and dependencies
+venv/
+.venv/
+env/
+ENV/
+
+# Secrets and configuration — NEVER commit or copy into image
+.env
+*.env
+!*.env.example
+
+# Databases and data
+*.db
+*.sqlite
+*.sqlite3
+*.wal
+*.shm
+autoprompt.db
+data/
+
+# Testing and development artifacts
+tests/
+reports/
+scratch/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Git and IDE
+.git/
+.gitignore
+.vscode/
+.idea/
+
+# OS metadata and logs
+.DS_Store
+Thumbs.db
+*.log
+logs/

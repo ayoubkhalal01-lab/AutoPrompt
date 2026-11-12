@@ -1,0 +1,39 @@
+{
+  "connectivity": {
+    "success": false,
+    "model": "gemini-3-flash-preview",
+    "response_time_ms": 0,
+    "response_text": null,
+    "error_code": "quota_exceeded",
+    "error_message": "API quota exceeded. Please wait a moment or check your Google AI Studio plan."
+  },
+  "count_tokens": {
+    "text": "AutoPrompt \u2014 Less Tokens. Better Prompts. Smarter Results.",
+    "tokens": 15
+  },
+  "generate_quick": {
+    "status": "provider_rate_limited_or_quota",
+    "error_code": "quota_exceeded",
+    "error_message": "API quota exceeded. Please wait a moment or check your Google AI Studio plan."
+  },
+  "generate_advanced": {
+    "status": "provider_rate_limited_or_quota",
+    "error_code": "quota_exceeded",
+    "error_message": "API quota exceeded. Please wait a moment or check your Google AI Studio plan."
+  },
+  "optimize_quick": {
+    "status": "provider_rate_limited_or_quota",
+    "error_code": "quota_exceeded",
+    "error_message": "API quota exceeded. Please wait a moment or check your Google AI Studio plan."
+  },
+  "optimize_advanced": {
+    "status": "provider_rate_limited_or_quota",
+    "error_code": "quota_exceeded",
+    "error_message": "API quota exceeded. Please wait a moment or check your Google AI Studio plan."
+  },
+  "optimize_concise": {
+    "status": "provider_rate_limited_or_quota",
+    "error_code": "quota_exceeded",
+    "error_message": "API quota exceeded. Please wait a moment or check your Google AI Studio plan."
+  }
+}

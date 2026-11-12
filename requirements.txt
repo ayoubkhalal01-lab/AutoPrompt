@@ -1,0 +1,19 @@
+# AutoPrompt — Root requirements.txt
+#
+# Used by Vercel Python builder to install dependencies for the api/ function.
+# This file mirrors backend/requirements.txt and adds psycopg2-binary for
+# PostgreSQL support (Neon Serverless).
+#
+# DO NOT remove this file — Vercel requires a requirements.txt at the repo root
+# (or at api/requirements.txt) to resolve Python function dependencies.
+#
+# Docker deployment continues to use backend/requirements.txt unchanged.
+
+fastapi==0.162.0
+uvicorn[standard]>=0.32.1
+python-dotenv>=1.0.1
+google-genai==2.34.0
+pydantic>=2.10.3
+httpx>=0.28.1
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.9

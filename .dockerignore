@@ -1,0 +1,54 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+backend/venv/
+backend/.venv/
+
+# Secrets and local configuration
+.env
+*.env
+!*.env.example
+backend/.env
+
+# SQLite databases and persistent volumes
+*.db
+*.sqlite
+*.sqlite3
+*.wal
+*.shm
+autoprompt.db
+backend/autoprompt.db
+data/
+backend/data/
+
+# Testing and development artifacts
+tests/
+backend/tests/
+reports/
+backend/reports/
+scratch/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Git and IDE
+.git/
+.gitignore
+.vscode/
+.idea/
+
+# OS metadata and logs
+.DS_Store
+Thumbs.db
+*.log
+logs/
+backend/*.log

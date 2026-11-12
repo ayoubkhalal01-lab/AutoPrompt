@@ -1,0 +1,397 @@
+{
+  "metadata": {
+    "model": "gemini-3-flash-preview",
+    "iterations": 3,
+    "timestamp": "2026-11-03 18:31:04Z"
+  },
+  "test_a_generate": {
+    "input": "Create a professional prompt for analyzing customer churn in a telecommunications company using Python and machine learning.",
+    "input_tokens": 20,
+    "runs": [
+      {
+        "run_index": 1,
+        "success": true,
+        "response_time_ms": 9566,
+        "output_tokens": 1001,
+        "api_usage": {
+          "prompt_token_count": 215,
+          "candidates_token_count": 1000,
+          "thoughts_token_count": 480,
+          "total_token_count": 1695
+        },
+        "evaluation": {
+          "criteria": {
+            "role": {
+              "passed": true,
+              "matched_keywords": [
+                "role",
+                "persona",
+                "expert",
+                "scientist"
+              ]
+            },
+            "context": {
+              "passed": true,
+              "matched_keywords": [
+                "context",
+                "telecommunication",
+                "telecom",
+                "background"
+              ]
+            },
+            "objective": {
+              "passed": true,
+              "matched_keywords": [
+                "objective",
+                "goal",
+                "predict",
+                "churn"
+              ]
+            },
+            "instructions": {
+              "passed": true,
+              "matched_keywords": [
+                "instruction",
+                "1.",
+                "2."
+              ]
+            },
+            "format": {
+              "passed": true,
+              "matched_keywords": [
+                "output format",
+                "expected output",
+                "structure",
+                "format"
+              ]
+            },
+            "constraints": {
+              "passed": true,
+              "matched_keywords": [
+                "constraint",
+                "guardrail",
+                "library"
+              ]
+            }
+          },
+          "score_percent": 100.0,
+          "all_passed": true
+        },
+        "output_text": "**Role / Persona**\nYou are a Senior Data Scientist and Machine Learning Engineer specializing in Customer Relationship Management (CRM) and Predictive Analytics within the Telecommunications sector. Your expertise lies in building high-performance binary classification models, handling imbalanced datasets, and translating complex model outputs into actionable business strategies for retention teams.\n\n**Context & Background**\nThe telecommunications industry faces high churn rates due to intense competition. We are working with a customer dataset (similar to the Telco Customer Churn dataset) containing:\n- **Demographics:** Gender, seniority, partner/dependents.\n- **Account Information:** Tenure, contract type, payment method, paperless billing, monthly charges, and total charges.\n- **Services:** Phone, multiple lines, internet (DSL/Fiber optic), online security, backup, device protection, tech support, and streaming services.\n- **Target Variable:** `Churn` (Yes/No).\n\nThe goal is to move beyond simple prediction and understand *why* customers leave to implement targeted intervention programs.\n\n**Objective**\nCreate a comprehensive Python-based machine learning pipeline to:\n1.  Preprocess and clean the telecommunications data.\n2.  Perform Exploratory Data Analysis (EDA) to identify churn patterns.\n3.  Train and optimize a predictive model (e.g., XGBoost, Random Forest, or LightGBM).\n4.  Evaluate the model using metrics relevant to imbalanced classes.\n5.  Extract feature importance to provide business insights.\n\n**Instructions**\n1.  **Data Preprocessing & Cleaning:**\n    *   Handle missing values (specifically checking for empty strings in `TotalCharges`).\n    *   Convert categorical variables into numerical format using One-Hot Encoding or Label Encoding.\n    *   Scale numerical features (Tenure, MonthlyCharges) using `StandardScaler` or `MinMaxScaler`.\n2.  **Exploratory Data Analysis (EDA):**\n    *   Visualize the distribution of the target variable (`Churn`).\n    *   Analyze the relationship between `Tenure` and `Churn`.\n    *   Identify correlations between service types (e.g., Fiber Optic vs. DSL) and churn rates.\n3.  **Model Development:**\n    *   Split the data into Training (80%) and Testing (20%) sets using stratified sampling.\n    *   Address class imbalance using techniques like SMOTE (Synthetic Minority Over-sampling Technique) or by adjusting `scale_pos_weight` in gradient boosting models.\n    *   Implement a pipeline using `scikit-learn` or a similar framework.\n4.  **Hyperparameter Tuning:**\n    *   Use `GridSearchCV` or `RandomizedSearchCV` to optimize the model (e.g., tuning `max_depth`, `learning_rate`, and `n_estimators`).\n5.  **Evaluation & Interpretability:**\n    *   Generate a Classification Report (Precision, Recall, F1-Score).\n    *   Plot a Confusion Matrix and an ROC-AUC Curve.\n    *   Use SHAP (SHapley Additive exPlanations) or built-in feature importance plots to identify the top 5 drivers of churn.\n\n**Expected Output Format**\nThe output must be structured as a professional technical report/notebook containing:\n- **Executive Summary:** A brief overview of the findings.\n- **Code Blocks:** Clean, commented Python code using libraries such as `pandas`, `seaborn`, `matplotlib`, `sklearn`, and `xgboost`.\n- **Visualizations:** Descriptions of the plots that should be generated.\n- **Model Performance Table:** A summary table comparing baseline vs. optimized model metrics.\n- **Business Recommendations:** 3-5 actionable insights based on the model's feature importance (e.g., \"Customers on month-to-month contracts with Fiber Optic are 3x more likely to churn; recommend loyalty discounts\").\n\n**Constraints & Guardrails**\n- **Library Constraints:** Use standard data science libraries: `pandas`, `numpy`, `scikit-learn`, `matplotlib`, `seaborn`. Use `xgboost` or `lightgbm` for the primary classifier.\n- **Data Integrity:** Ensure `TotalCharges` is cast to float and nulls are handled before scaling.\n- **Class Imbalance:** Do not rely solely on \"Accuracy\" as a metric; prioritize Recall (to catch as many churners as possible) and the F1-score.\n- **Reproducibility:** Always set a `random_state` (e.g., 42) for data splits and model initialization.\n- **Negative Constraint:** Avoid overly complex deep learning models unless traditional gradient boosting fails to achieve an AUC > 0.80. Keep the solution interpretable for stakeholders."
+      },
+      {
+        "run_index": 2,
+        "success": true,
+        "response_time_ms": 9617,
+        "output_tokens": 940,
+        "api_usage": {
+          "prompt_token_count": 215,
+          "candidates_token_count": 938,
+          "thoughts_token_count": 479,
+          "total_token_count": 1632
+        },
+        "evaluation": {
+          "criteria": {
+            "role": {
+              "passed": true,
+              "matched_keywords": [
+                "role",
+                "persona",
+                "expert",
+                "specialist",
+                "scientist"
+              ]
+            },
+            "context": {
+              "passed": true,
+              "matched_keywords": [
+                "context",
+                "telecommunication",
+                "telecom",
+                "background"
+              ]
+            },
+            "objective": {
+              "passed": true,
+              "matched_keywords": [
+                "objective",
+                "predict",
+                "churn"
+              ]
+            },
+            "instructions": {
+              "passed": true,
+              "matched_keywords": [
+                "instruction",
+                "1.",
+                "2."
+              ]
+            },
+            "format": {
+              "passed": true,
+              "matched_keywords": [
+                "output format",
+                "expected output",
+                "format"
+              ]
+            },
+            "constraints": {
+              "passed": true,
+              "matched_keywords": [
+                "constraint",
+                "guardrail",
+                "library"
+              ]
+            }
+          },
+          "score_percent": 100.0,
+          "all_passed": true
+        },
+        "output_text": "# Role / Persona\nYou are a Senior Data Scientist and Customer Retention Specialist with deep expertise in the telecommunications industry. Your specialty is building high-performance predictive models that translate complex behavioral data into actionable business strategies to reduce churn and increase Customer Lifetime Value (CLV).\n\n# Context & Background\nThe telecommunications sector is highly competitive, with high customer acquisition costs. Retaining existing customers is significantly more cost-effective than acquiring new ones. We are working with a standard telecom dataset (similar to the Telco Customer Churn dataset) which includes:\n- **Demographics**: Gender, seniority, partner/dependents status.\n- **Service Details**: Phone service, multiple lines, internet service (DSL/Fiber), security, backup, protection, tech support, streaming.\n- **Account Information**: Tenure, contract type (Month-to-month, One year, Two year), payment method, paperless billing, monthly charges, and total charges.\n- **Target Variable**: `Churn` (Yes/No).\n\n# Objective\nCreate a comprehensive Python-based machine learning pipeline to:\n1.  Clean and preprocess the data.\n2.  Perform Exploratory Data Analysis (EDA) to identify key churn drivers.\n3.  Train and optimize a predictive model to identify customers at high risk of churning.\n4.  Provide model interpretability to explain *why* customers are leaving.\n\n# Instructions\n1.  **Data Preprocessing & Cleaning**:\n    *   Handle missing values (specifically checking for empty strings in `TotalCharges`).\n    *   Convert categorical variables into numerical formats using One-Hot Encoding or Label Encoding.\n    *   Scale numerical features (e.g., `MonthlyCharges`, `Tenure`) using `StandardScaler` or `MinMaxScaler`.\n2.  **Exploratory Data Analysis (EDA)**:\n    *   Generate visualizations (using Seaborn/Matplotlib) showing the relationship between churn and features like `Contract`, `Tenure`, and `InternetService`.\n    *   Calculate the baseline churn rate.\n3.  **Feature Engineering**:\n    *   Create new features if applicable (e.g., `TotalCharges` / `Tenure` ratio).\n    *   Address class imbalance using techniques like SMOTE (Synthetic Minority Over-sampling Technique) or by adjusting class weights in the model.\n4.  **Model Development**:\n    *   Split the data into Training (80%) and Testing (20%) sets.\n    *   Implement and compare at least three models: Logistic Regression, Random Forest, and XGBoost.\n    *   Perform Hyperparameter Tuning using `GridSearchCV` or `RandomizedSearchCV`.\n5.  **Evaluation**:\n    *   Report performance using a Confusion Matrix, Precision, Recall, F1-Score, and ROC-AUC.\n    *   Prioritize **Recall** for the churn class to ensure we capture as many potential churners as possible.\n6.  **Interpretability & Insights**:\n    *   Extract and plot Feature Importance.\n    *   Use SHAP (SHalpey Additive exPlanations) or LIME to explain individual predictions.\n\n# Expected Output Format\n1.  **Executive Summary**: A brief overview of the model's performance and the top 3 predictors of churn.\n2.  **Python Code**: Clean, modular, and commented code blocks using `pandas`, `numpy`, `scikit-learn`, and `xgboost`.\n3.  **Visualizations**: Code to generate plots for EDA and Model Evaluation (ROC Curve, Confusion Matrix).\n4.  **Metrics Table**: A comparison table of the models tested.\n5.  **Business Recommendations**: 3-5 actionable strategies for the marketing/retention team based on the model's findings.\n\n# Constraints & Guardrails\n- **Library Restrictions**: Use only standard data science libraries: `pandas`, `numpy`, `matplotlib`, `seaborn`, `scikit-learn`, `xgboost`, and `shap`.\n- **Data Integrity**: Ensure `TotalCharges` is converted to a float and handle any resulting NaNs from empty strings.\n- **Class Imbalance**: You must explicitly address the fact that churn datasets are usually imbalanced (more non-churners than churners).\n- **Reproducibility**: Set a `random_state` for all stochastic processes (train-test split, model initialization).\n- **Avoid Overfitting**: Use cross-validation during the training phase."
+      },
+      {
+        "run_index": 3,
+        "success": true,
+        "response_time_ms": 16468,
+        "output_tokens": 928,
+        "api_usage": {
+          "prompt_token_count": 215,
+          "candidates_token_count": 926,
+          "thoughts_token_count": 441,
+          "total_token_count": 1582
+        },
+        "evaluation": {
+          "criteria": {
+            "role": {
+              "passed": true,
+              "matched_keywords": [
+                "role",
+                "persona",
+                "expert",
+                "scientist"
+              ]
+            },
+            "context": {
+              "passed": true,
+              "matched_keywords": [
+                "context",
+                "telecommunication",
+                "telecom",
+                "background"
+              ]
+            },
+            "objective": {
+              "passed": true,
+              "matched_keywords": [
+                "objective",
+                "predict",
+                "churn",
+                "attrition"
+              ]
+            },
+            "instructions": {
+              "passed": true,
+              "matched_keywords": [
+                "instruction",
+                "1.",
+                "2."
+              ]
+            },
+            "format": {
+              "passed": true,
+              "matched_keywords": [
+                "output format",
+                "expected output",
+                "format"
+              ]
+            },
+            "constraints": {
+              "passed": true,
+              "matched_keywords": [
+                "constraint",
+                "guardrail",
+                "library"
+              ]
+            }
+          },
+          "score_percent": 100.0,
+          "all_passed": true
+        },
+        "output_text": "# Role / Persona\nYou are a Senior Data Scientist and Machine Learning Engineer specializing in Customer Relationship Management (CRM) and Predictive Analytics within the Telecommunications sector. You have deep expertise in identifying patterns of customer attrition and translating complex statistical outputs into actionable business retention strategies.\n\n# Context & Background\nThe telecommunications industry faces high churn rates due to intense competition and low switching costs. Our company needs to move from reactive to proactive retention. We have a dataset containing customer demographics (gender, age, partners), service details (phone, multiple lines, internet, tech support, streaming), account information (tenure, contract type, payment method, monthly charges), and the target variable: \"Churn\" (Yes/No).\n\n# Objective\nDevelop a comprehensive Python-based machine learning pipeline to:\n1.  Identify customers with a high probability of churning.\n2.  Determine the primary drivers/features contributing to churn.\n3.  Provide a ranked list of at-risk customers for the marketing team to target with retention offers.\n\n# Instructions\n1.  **Data Preprocessing & Cleaning**:\n    *   Handle missing values (specifically checking for empty strings in `TotalCharges`).\n    *   Convert categorical variables into numerical formats using One-Hot Encoding or Label Encoding as appropriate.\n    *   Scale numerical features (e.g., `MonthlyCharges`, `tenure`) using `StandardScaler` or `MinMaxScaler`.\n2.  **Exploratory Data Analysis (EDA)**:\n    *   Analyze the distribution of the target variable (Churn).\n    *   Visualize correlations between features and churn (e.g., churn rate by contract type or internet service provider).\n3.  **Feature Engineering**:\n    *   Create relevant features such as `AverageMonthlyCharge` or binning `tenure` into cohorts (e.g., 0-12 months, 12-24 months).\n4.  **Model Development**:\n    *   Split the data into training (80%) and testing (20%) sets using stratified sampling.\n    *   Implement and compare at least three models: Logistic Regression (baseline), Random Forest, and XGBoost/LightGBM.\n    *   Address class imbalance using techniques like SMOTE (Synthetic Minority Over-sampling Technique) or adjusting class weights.\n5.  **Evaluation**:\n    *   Report performance using Precision, Recall, F1-Score, and ROC-AUC.\n    *   Prioritize **Recall** for the \"Churn=Yes\" class to ensure we capture as many at-risk customers as possible.\n6.  **Model Explainability**:\n    *   Use SHAP (SHapley Additive exPlanations) or Feature Importance plots to explain which variables are driving the model's predictions.\n7.  **Business Insights**:\n    *   Segment the \"at-risk\" customers into \"High Value\" vs. \"Low Value\" based on `MonthlyCharges` to prioritize retention efforts.\n\n# Expected Output Format\n1.  **Executive Summary**: A brief overview of the model's performance and key findings.\n2.  **Python Code**: Modular, well-commented Python code using `pandas`, `scikit-learn`, `matplotlib/seaborn`, and `xgboost`.\n3.  **Visualizations**:\n    *   Confusion Matrix.\n    *   ROC Curve.\n    *   Top 10 Feature Importance Plot.\n4.  **Actionable Recommendations**: 3-5 specific business strategies based on the data (e.g., \"Offer discounts to Fiber Optic users on month-to-month contracts\").\n\n# Constraints & Guardrails\n*   **Data Leakage**: Ensure that features like `TotalCharges` do not inadvertently leak information about the target (e.g., if total charges stop accumulating because the customer churned).\n*   **Library Versions**: Use standard, stable versions of libraries (e.g., `scikit-learn>=1.0`).\n*   **Reproducibility**: Set a `random_state` for all stochastic processes (train-test split, model initialization).\n*   **Interpretability**: While high accuracy is important, the model must be interpretable enough for non-technical stakeholders to trust the results.\n*   **Handling Imbalance**: Do not rely solely on \"Accuracy\" as a metric, as the dataset is likely imbalanced toward non-churners."
+      }
+    ]
+  },
+  "test_b_optimize": {
+    "input": "Analyze my data and tell me why customers leave. Use Python and give me useful results.",
+    "input_tokens": 19,
+    "runs": [
+      {
+        "run_index": 1,
+        "success": true,
+        "response_time_ms": 6066,
+        "output_tokens": 514,
+        "api_usage": {
+          "prompt_token_count": 194,
+          "candidates_token_count": 513,
+          "thoughts_token_count": 435,
+          "total_token_count": 1142
+        },
+        "evaluation": {
+          "criteria": {
+            "intent_preserved": {
+              "passed": true,
+              "matched_keywords": [
+                "churn",
+                "leave",
+                "customer",
+                "python"
+              ]
+            },
+            "specificity_added": {
+              "passed": true,
+              "matched_keywords": [
+                "model",
+                "feature",
+                "metric",
+                "preprocessing",
+                "analysis",
+                "insight"
+              ]
+            },
+            "no_data_invented": {
+              "passed": true,
+              "matched_keywords": [
+                "dataset"
+              ]
+            },
+            "output_format": {
+              "passed": true,
+              "matched_keywords": [
+                "output format",
+                "recommendation"
+              ]
+            }
+          },
+          "score_percent": 100.0,
+          "all_passed": true
+        },
+        "output_text": "**Role**: Senior Data Scientist and Churn Analyst.\n**Objective**: Analyze the provided customer dataset to identify the primary drivers of churn and provide actionable business recommendations.\n\n### Phase 1: Data Inspection & Preprocessing\n1. **Schema Audit**: Inspect the dataset to identify the target variable (e.g., `Churn`, `Exited`) and feature types (categorical vs. numerical).\n2. **Data Cleaning**: Handle missing values, remove duplicates, and ensure correct data types.\n3. **Feature Engineering**: Encode categorical variables (One-Hot or Label Encoding) and scale numerical features if necessary for specific models.\n\n### Phase 2: Exploratory Data Analysis (EDA)\n1. **Churn Distribution**: Calculate the baseline churn rate.\n2. **Correlation Analysis**: Identify linear relationships between features and the churn target.\n3. **Segment Comparison**: Compare the distributions of key metrics (e.g., tenure, monthly charges, usage frequency) between churned and retained customers.\n\n### Phase 3: Statistical Modeling & Feature Importance\n1. **Model Selection**: Train a classification model (e.g., Random Forest or XGBoost) to predict churn.\n2. **Feature Importance**: Extract and rank the top 5–10 features that most significantly influence a customer's decision to leave.\n3. **Model Evaluation**: Provide key metrics (Accuracy, Precision, Recall, and F1-Score) to ensure the analysis is reliable.\n\n### Phase 4: Actionable Insights\n1. **Root Cause Analysis**: For the top 3 drivers of churn, explain the \"why\" (e.g., \"Customers with month-to-month contracts are 3x more likely to churn than those on annual plans\").\n2. **Strategic Recommendations**: Provide specific, data-driven tactics to reduce churn (e.g., targeted discounts for high-risk segments, UX improvements for specific features).\n\n### Expected Output Format:\n- **Python Code**: Clean, commented blocks using `pandas`, `matplotlib/seaborn`, and `scikit-learn`.\n- **Key Findings**: A bulleted list of the most significant churn predictors.\n- **Visualizations**: Descriptions or code for plots (e.g., Feature Importance bar chart, Churn vs. Tenure boxplot).\n- **Business Strategy**: 3–5 actionable steps to improve retention.\n\n**Note**: Please provide the dataset or describe the column headers and a sample row to begin the analysis."
+      },
+      {
+        "run_index": 2,
+        "success": true,
+        "response_time_ms": 9230,
+        "output_tokens": 530,
+        "api_usage": {
+          "prompt_token_count": 194,
+          "candidates_token_count": 529,
+          "thoughts_token_count": 724,
+          "total_token_count": 1447
+        },
+        "evaluation": {
+          "criteria": {
+            "intent_preserved": {
+              "passed": true,
+              "matched_keywords": [
+                "churn",
+                "attrition",
+                "customer",
+                "python"
+              ]
+            },
+            "specificity_added": {
+              "passed": true,
+              "matched_keywords": [
+                "model",
+                "feature",
+                "metric",
+                "preprocessing",
+                "analysis",
+                "insight"
+              ]
+            },
+            "no_data_invented": {
+              "passed": true,
+              "matched_keywords": [
+                "dataset"
+              ]
+            },
+            "output_format": {
+              "passed": true,
+              "matched_keywords": [
+                "output format",
+                "summary",
+                "recommendation"
+              ]
+            }
+          },
+          "score_percent": 100.0,
+          "all_passed": true
+        },
+        "output_text": "**Role:** Senior Data Scientist & Business Analyst\n\n**Task:** Perform a comprehensive Customer Churn Analysis using Python to identify the primary drivers of attrition and provide actionable retention strategies.\n\n**Phase 1: Data Inspection & Preprocessing**\n1. **Schema Validation:** Inspect the dataset for key variables (e.g., `CustomerID`, `Tenure`, `ContractType`, `MonthlyCharges`, `TotalCharges`, `SupportTickets`, and the target variable `Churn`).\n2. **Data Cleaning:** Handle missing values, remove duplicates, and ensure correct data types (e.g., converting strings to floats where applicable).\n3. **Feature Engineering:** Encode categorical variables (One-Hot or Label Encoding) and scale numerical features if required for modeling.\n\n**Phase 2: Exploratory Data Analysis (EDA)**\n1. **Descriptive Statistics:** Calculate the baseline churn rate and summary statistics for churned vs. retained segments.\n2. **Visualization:** Generate the following plots using `Seaborn` or `Matplotlib`:\n    *   **Distribution Analysis:** Compare tenure and monthly charges across churn groups.\n    *   **Categorical Correlation:** Heatmaps or bar charts showing churn rates by contract type, payment method, or service tier.\n    *   **Correlation Matrix:** Identify multicollinearity and direct relationships with the `Churn` flag.\n\n**Phase 3: Statistical Modeling & Feature Importance**\n1. **Model Implementation:** Train a classification model (e.g., Random Forest, XGBoost, or Logistic Regression) to predict churn.\n2. **Driver Identification:** Extract and rank features by importance to determine the top 5 statistical predictors of customer exit.\n3. **Segment Analysis:** Identify specific high-risk customer cohorts (e.g., \"Customers with month-to-month contracts and >2 support tickets\").\n\n**Phase 4: Expected Output Format**\n1. **Python Implementation:** Clean, commented code blocks for data processing and modeling.\n2. **Visual Insights:** Key charts highlighting the \"Why\" behind the data.\n3. **Executive Summary:** \n    *   **Top Drivers:** A prioritized list of the factors most strongly associated with churn.\n    *   **Actionable Recommendations:** Specific business interventions (e.g., \"Transition month-to-month users to annual plans via targeted discounts\").\n    *   **Model Performance:** Brief metrics (Accuracy, Precision/Recall, or AUC-ROC) to validate findings.\n\n*Note: Please provide the dataset or a description of your columns to begin the analysis.*"
+      },
+      {
+        "run_index": 3,
+        "success": true,
+        "response_time_ms": 6783,
+        "output_tokens": 452,
+        "api_usage": {
+          "prompt_token_count": 194,
+          "candidates_token_count": 451,
+          "thoughts_token_count": 493,
+          "total_token_count": 1138
+        },
+        "evaluation": {
+          "criteria": {
+            "intent_preserved": {
+              "passed": true,
+              "matched_keywords": [
+                "churn",
+                "leave",
+                "attrition",
+                "customer",
+                "python"
+              ]
+            },
+            "specificity_added": {
+              "passed": true,
+              "matched_keywords": [
+                "model",
+                "feature",
+                "metric",
+                "preprocessing",
+                "analysis"
+              ]
+            },
+            "no_data_invented": {
+              "passed": true,
+              "matched_keywords": [
+                "dataset"
+              ]
+            },
+            "output_format": {
+              "passed": true,
+              "matched_keywords": [
+                "output format",
+                "summary",
+                "recommendation"
+              ]
+            }
+          },
+          "score_percent": 100.0,
+          "all_passed": true
+        },
+        "output_text": "**Role:** Senior Data Scientist & Business Analyst\n\n**Task:** Perform a comprehensive Customer Churn Analysis using Python to identify the primary drivers of customer attrition and provide actionable business recommendations.\n\n**Methodology:**\n1. **Data Inspection & Profiling:** \n   - Load the dataset and inspect the schema (columns, data types, missing values).\n   - Identify the target variable (e.g., `Churn`, `Exited`) and key features (e.g., `Tenure`, `MonthlyCharges`, `ContractType`, `SupportTickets`).\n2. **Preprocessing:** \n   - Handle missing values and outliers.\n   - Encode categorical variables (One-Hot or Label Encoding).\n   - Scale numerical features if necessary.\n3. **Exploratory Data Analysis (EDA):**\n   - Calculate the baseline churn rate.\n   - Generate a correlation matrix to identify features most strongly associated with churn.\n   - Visualize distributions of key metrics for churned vs. retained customers.\n4. **Feature Importance Modeling:**\n   - Train a Random Forest or XGBoost classifier to rank features by their predictive power regarding churn.\n   - Use SHAP (SHapley Additive exPlanations) or Permutation Importance to explain model decisions.\n5. **Synthesis:**\n   - Translate statistical correlations into business hypotheses (e.g., \"Customers on month-to-month contracts are 3x more likely to leave\").\n\n**Expected Output Format:**\n1. **Data Summary:** A brief overview of the dataset's health and identified key variables.\n2. **Python Code:** Clean, modular code using `pandas`, `matplotlib/seaborn`, and `scikit-learn`.\n3. **Key Findings:** A bulleted list of the top 3–5 drivers of churn based on feature importance and correlation.\n4. **Actionable Recommendations:** Specific business strategies to mitigate churn based on the findings (e.g., targeted loyalty offers for high-risk segments).\n\n**Note to Model:** If the dataset schema is not provided, start by requesting the user to provide the column names or a sample of the data before proceeding with the full analysis."
+      }
+    ]
+  },
+  "summary": {
+    "test_a_avg_time_ms": 11883.7,
+    "test_a_avg_tokens": 956.3,
+    "test_a_avg_score": 100.0,
+    "test_b_avg_time_ms": 7359.7,
+    "test_b_avg_tokens": 498.7,
+    "test_b_avg_score": 100.0,
+    "all_runs_succeeded": true
+  }
+}

@@ -1,0 +1,79 @@
+# ==============================================================================
+# AutoPrompt Production Docker Compose (Phase 8.2)
+# Orchestrates FastAPI Backend and Static Frontend with Persistent SQLite Storage
+# ==============================================================================
+
+services:
+  # ── Backend Service (FastAPI + Uvicorn) ────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: autoprompt-backend:1.0.0
+    container_name: autoprompt-backend
+    restart: unless-stopped
+    ports:
+      # Bound strictly to loopback interface for local container validation
+      - "127.0.0.1:8000:8000"
+    volumes:
+      # Named persistent volume mounted to container storage path
+      - autoprompt-data:/app/data
+    environment:
+      # Injected from host environment or backend/.env file (secrets never baked into image)
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-3-flash-preview}
+      - GEMINI_TEMPERATURE=${GEMINI_TEMPERATURE:-0.7}
+      - GEMINI_TIMEOUT_SECONDS=${GEMINI_TIMEOUT_SECONDS:-30.0}
+      - GEMINI_MAX_RETRIES=${GEMINI_MAX_RETRIES:-2}
+      - HOST=0.0.0.0
+      - PORT=8000
+      - DEBUG=${DEBUG:-false}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - DATABASE_URL=sqlite:////app/data/autoprompt.db
+    env_file:
+      - path: ./.env
+        required: false
+      - path: ./backend/.env
+        required: false
+    networks:
+      - autoprompt-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request, sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health').getcode() == 200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # ── Frontend Service (Alpine Nginx Static SPA) ─────────────────────────────
+  frontend:
+    build:
+      context: ./autoprompt-prototype
+      dockerfile: Dockerfile
+    image: autoprompt-frontend:1.0.0
+    container_name: autoprompt-frontend
+    restart: unless-stopped
+    ports:
+      # Bound strictly to loopback interface (port 5500 matches default development CORS)
+      - "127.0.0.1:5500:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - autoprompt-network
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:80/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+# ── Isolated Internal Network ────────────────────────────────────────────────
+networks:
+  autoprompt-network:
+    name: autoprompt-net
+    driver: bridge
+
+# ── Persistent Storage Volumes ───────────────────────────────────────────────
+volumes:
+  autoprompt-data:
+    name: autoprompt-sqlite-data

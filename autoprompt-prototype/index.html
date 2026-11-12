@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AutoPrompt — Turn your ideas into better prompts. Create and optimize AI prompts with less unnecessary tokens.">
+  <title>AutoPrompt — Less Tokens. Better Prompts. Smarter Results.</title>
+
+  <!-- Typography: Inter font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <!-- Application Scripts (deferred execution in dependency order) -->
+  <script src="js/mock-data.js" defer></script>
+  <script src="js/theme.js" defer></script>
+  <script src="js/workspace.js" defer></script>
+  <script src="js/app.js" defer></script>
+  <script src="js/persistence.js" defer></script>
+</head>
+<body>
+  <!-- Root Application Shell -->
+  <div class="app-shell" id="app">
+
+    <!-- Top Navigation Header -->
+    <header class="app-header" role="banner">
+      <div class="header-container">
+        
+        <!-- AutoPrompt Wordmark / Logo (Clean text-based logo) -->
+        <div class="header-brand">
+          <a href="#" class="brand-link" aria-label="AutoPrompt Home">
+            <span class="brand-wordmark">
+              <span class="brand-mark-auto">Auto</span><span class="brand-mark-prompt">Prompt</span>
+            </span>
+          </a>
+        </div>
+
+        <!-- Header Actions: Saved Prompts, History, Language Selector, Theme Toggle, Login Button -->
+        <nav class="header-actions" aria-label="User navigation">
+          
+          <!-- Saved Prompts Navigation Button -->
+          <button id="btn-nav-saved-prompts" class="btn btn-outline btn-sm nav-btn-persistence" type="button" aria-label="Open Saved Prompts" title="View your saved prompt collection">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+              <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+            <span>Saved Prompts</span>
+            <span id="saved-prompts-count-badge" class="badge-count" style="display:none;">0</span>
+          </button>
+
+          <!-- Prompt History Navigation Button -->
+          <button id="btn-nav-history" class="btn btn-outline btn-sm nav-btn-persistence" type="button" aria-label="Open Prompt History" title="View previous Generate and Optimize runs">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span>History</span>
+            <span id="history-count-badge" class="badge-count" style="display:none;">0</span>
+          </button>
+
+          <!-- Language Selector (English, French) -->
+          <div class="lang-selector-wrapper">
+            <label for="lang-select" class="sr-only">Select interface language</label>
+            <div class="select-icon-wrapper">
+              <svg class="lang-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+              <select id="lang-select" class="lang-select" aria-label="Select language">
+                <option value="en" selected>English</option>
+                <option value="fr">Français</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Theme Toggle Button -->
+          <button id="theme-toggle" class="btn btn-icon btn-ghost" type="button" aria-label="Toggle color theme" title="Toggle color theme">
+            <!-- Sun Icon (visible in dark mode) -->
+            <svg class="theme-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <!-- Moon Icon (visible in light mode) -->
+            <svg class="theme-icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+
+          <!-- Login Button -->
+          <button class="btn btn-login" type="button" aria-label="Log in">
+            Log In
+          </button>
+        </nav>
+
+      </div>
+    </header>
+
+    <!-- Main Dashboard Area (No sidebar, centered SaaS workspace) -->
+    <main class="app-main" id="main-content" role="main">
+      <div class="dashboard-container">
+
+        <!-- Hero Section -->
+        <section class="hero-section" aria-labelledby="hero-title">
+          <div class="hero-badge">
+            <span class="badge-dot" aria-hidden="true"></span>
+            <span class="badge-text">Less Tokens. Better Prompts. Smarter Results.</span>
+          </div>
+          <h1 id="hero-title" class="hero-title">Turn your ideas into better prompts.</h1>
+          <p class="hero-subtitle">Create and optimize AI prompts with less unnecessary tokens.</p>
+        </section>
+
+        <!-- Central Workspace Card -->
+        <section class="workspace-section" aria-label="Prompt Workspace">
+          <div class="card workspace-card" id="main-workspace-card">
+            
+            <!-- Service Selectors (Generate & Optimize) -->
+            <div class="service-selector-bar">
+              <div class="service-tabs" role="tablist" aria-label="Prompt Services">
+                <button 
+                  id="selector-generate" 
+                  class="service-tab active" 
+                  role="tab" 
+                  aria-selected="true" 
+                  aria-controls="workspace-content"
+                  data-service="generate"
+                  type="button"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                  </svg>
+                  <span>Generate</span>
+                </button>
+
+                <button 
+                  id="selector-optimize" 
+                  class="service-tab" 
+                  role="tab" 
+                  aria-selected="false" 
+                  aria-controls="workspace-content"
+                  data-service="optimize"
+                  type="button"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                  </svg>
+                  <span>Optimize</span>
+                </button>
+              </div>
+
+              <div class="service-status-pill" aria-live="polite">
+                <span id="service-status-dot" class="status-indicator-dot" aria-hidden="true"></span>
+                <span id="service-status-text" class="status-text">Ready to generate</span>
+              </div>
+            </div>
+
+            <!-- Workspace Content Container -->
+            <div id="workspace-content" class="workspace-body" role="tabpanel" aria-labelledby="selector-generate">
+              
+              <!-- ============================================================
+                   UNIFIED PROCESSING STATE OVERLAY (STEP 5)
+                   ============================================================ -->
+              <div id="unified-processing-view" class="processing-overlay" hidden role="status" aria-live="polite">
+                <div class="processing-card">
+                  <div class="processing-spinner-container">
+                    <div class="pulse-ring" aria-hidden="true"></div>
+                    <div class="spinner-orbit" aria-hidden="true"></div>
+                    <div class="spinner-core-icon" aria-hidden="true">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div class="processing-text-group">
+                    <div class="service-indicator-tag">
+                      <span class="badge-dot" aria-hidden="true"></span>
+                      <span id="processing-service-label">Generate Service</span>
+                    </div>
+                    <h3 class="processing-main-msg">Working on your prompt...</h3>
+                    <p class="processing-support-msg">Preparing your prompt experience.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ============================================================
+                   UNIFIED ERROR STATE VIEW (STEP 5)
+                   ============================================================ -->
+              <div id="unified-error-view" class="state-feedback-card error-card" hidden role="alert" aria-live="assertive">
+                <div class="state-icon-wrapper error-icon" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                  </svg>
+                </div>
+                <div class="state-content">
+                  <h3 class="state-title">Unable to complete request</h3>
+                  <p id="error-description" class="state-description">
+                    A temporary connection issue occurred while preparing your prompt. Your inputs have been preserved.
+                  </p>
+                </div>
+                <div class="state-actions">
+                  <button id="btn-retry-process" class="btn btn-primary-gradient btn-sm" type="button">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <polyline points="23 4 23 10 17 10"></polyline>
+                      <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                    </svg>
+                    <span>Retry</span>
+                  </button>
+                  <button id="btn-return-edit-error" class="btn btn-outline btn-sm" type="button">
+                    <span>Return to Editing</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- ============================================================
+                   UNIFIED COMPLETE RESULTS INTERFACE (STEP 6)
+                   ============================================================ -->
+              <div id="unified-results-view" class="results-view" hidden>
+                
+                <!-- A. Results Header -->
+                <div class="results-header-block">
+                  <div class="results-header-text">
+                    <div class="results-badge-row">
+                      <span id="results-service-badge" class="badge badge-primary">Generate Service</span>
+                      <span class="badge badge-success">&#10003; Complete</span>
+                      <span class="badge badge-demo" id="badge-demo-indicator" hidden>&#9888; Prototype Simulation &bull; Demo data</span>
+                    </div>
+                    <h2 class="results-title">Your prompt is ready</h2>
+                    <p id="results-subtitle" class="results-subtitle">
+                      Your prompt has been structured for optimal AI performance with lean tokens.
+                    </p>
+                  </div>
+
+                  <!-- Quick Action Bar -->
+                  <div class="results-top-actions">
+                    <button id="btn-results-save-top" class="btn btn-outline btn-sm" type="button" title="Save this prompt to your collection">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                        <polyline points="7 3 7 8 15 8"></polyline>
+                      </svg>
+                      <span>Save Prompt</span>
+                    </button>
+
+                    <button id="btn-results-copy-top" class="btn btn-primary-gradient btn-sm" type="button">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                      </svg>
+                      <span class="copy-label">Copy Prompt</span>
+                    </button>
+
+                    <button id="btn-results-edit-top" class="btn btn-outline btn-sm" type="button">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                      </svg>
+                      <span>Edit</span>
+                    </button>
+
+                    <button id="btn-results-try-again-top" class="btn btn-ghost btn-sm" type="button" title="Re-run simulation with current inputs">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <polyline points="23 4 23 10 17 10"></polyline>
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                      </svg>
+                      <span>Try Again</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- D. Token Analysis Grid (4 Metric Cards with Demo Data Tag) -->
+                <div class="metrics-section">
+                  <div class="metrics-section-header">
+                    <span class="metrics-title">Token Analysis</span>
+                    <span class="metrics-disclaimer-pill">&#9432; Real token counts via Gemini API</span>
+                  </div>
+
+                  <div class="metrics-grid">
+                    <!-- Metric 1: Original / Input Tokens -->
+                    <div class="metric-card">
+                      <span class="metric-label" id="label-metric-1">Original Tokens</span>
+                      <span id="metric-original-tokens" class="metric-value">—</span>
+                      <span class="metric-subtext" id="subtext-metric-1">Input token count</span>
+                    </div>
+
+                    <!-- Metric 2: Optimized / Output Tokens -->
+                    <div class="metric-card highlight">
+                      <span class="metric-label" id="label-metric-2">Optimized Tokens</span>
+                      <span id="metric-optimized-tokens" class="metric-value">—</span>
+                      <span class="metric-subtext" id="subtext-metric-2">Output token count</span>
+                    </div>
+
+                    <!-- Metric 3: Tokens Saved / Delta -->
+                    <div class="metric-card">
+                      <span class="metric-label" id="label-metric-3">Tokens Saved</span>
+                      <span id="metric-tokens-saved" class="metric-value text-success">—</span>
+                      <span class="metric-subtext" id="subtext-metric-3">Token reduction</span>
+                    </div>
+
+                    <!-- Metric 4: Reduction / Change Percentage -->
+                    <div class="metric-card">
+                      <span class="metric-label" id="label-metric-4">Reduction Percentage</span>
+                      <span id="metric-reduction-percent" class="metric-value text-violet">—</span>
+                      <span class="metric-subtext" id="subtext-metric-4">Efficiency gain</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- C. Primary Output Card: Optimized / Generated Prompt -->
+                <div class="result-prompt-card">
+                  <div class="prompt-card-header">
+                    <div class="prompt-card-title-group">
+                      <span class="card-icon" aria-hidden="true">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                      </span>
+                      <h3 class="card-heading">Generated / Optimized Prompt</h3>
+                    </div>
+                    <div class="prompt-card-actions" style="display: flex; gap: var(--space-2);">
+                      <button id="btn-save-main-result" class="btn btn-outline btn-sm" type="button" title="Save prompt to collection">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                          <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                          <polyline points="7 3 7 8 15 8"></polyline>
+                        </svg>
+                        <span>Save Prompt</span>
+                      </button>
+                      <button id="btn-copy-main-result" class="btn btn-outline btn-sm" type="button">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        <span class="copy-label">Copy Prompt</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="prompt-card-body">
+                    <pre id="results-final-prompt-text" class="results-prompt-block" tabindex="0" aria-label="Final prompt content"></pre>
+                  </div>
+                </div>
+
+                <!-- E. Before / After Comparison Grid -->
+                <div class="comparison-section">
+                  <div class="comparison-section-header">
+                    <h3 class="comparison-title">Before / After Comparison</h3>
+                    <button id="btn-toggle-view-original" class="btn btn-ghost btn-sm" type="button">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                      </svg>
+                      <span id="toggle-original-text">Hide Original</span>
+                    </button>
+                  </div>
+
+                  <div class="comparison-grid" id="comparison-grid">
+                    <!-- Column 1: Original Prompt -->
+                    <div class="comparison-col before-col" id="col-original-prompt">
+                      <div class="comparison-col-header">
+                        <span class="col-pill col-pill-before">Original Input</span>
+                        <span class="col-sub">Raw user submission</span>
+                      </div>
+                      <div class="comparison-col-content">
+                        <pre id="results-original-prompt-text" class="comparison-text-block"></pre>
+                      </div>
+                    </div>
+
+                    <!-- Column 2: Refined Prompt -->
+                    <div class="comparison-col after-col">
+                      <div class="comparison-col-header">
+                        <span class="col-pill col-pill-after">Refined Output</span>
+                        <span class="col-sub">Structured &amp; compressed</span>
+                      </div>
+                      <div class="comparison-col-content">
+                        <pre id="results-comparison-refined-text" class="comparison-text-block highlight-border"></pre>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- F. Explain Changes Section ("What changed and why?") -->
+                <div class="explanations-section">
+                  <div class="explanations-header">
+                    <h3 class="explanations-title">What changed and why?</h3>
+                    <span class="badge badge-demo" id="badge-explain-demo" hidden>&#9432; Illustrative demo content</span>
+                  </div>
+
+                  <div class="explanations-grid">
+                    <div class="explain-card">
+                      <div class="explain-card-icon" aria-hidden="true">&#10003;</div>
+                      <div class="explain-card-text">
+                        <h4 class="explain-card-title">Improved Clarity</h4>
+                        <p class="explain-card-desc">Eliminated ambiguous instructions and phrasing to help the LLM understand requirements faster.</p>
+                      </div>
+                    </div>
+
+                    <div class="explain-card">
+                      <div class="explain-card-icon" aria-hidden="true">&#9776;</div>
+                      <div class="explain-card-text">
+                        <h4 class="explain-card-title">Better Structure</h4>
+                        <p class="explain-card-desc">Organized objectives, context, and expected output into hierarchical markdown sections.</p>
+                      </div>
+                    </div>
+
+                    <div class="explain-card">
+                      <div class="explain-card-icon" aria-hidden="true">&#9986;</div>
+                      <div class="explain-card-text">
+                        <h4 class="explain-card-title">Removed Unnecessary Repetition</h4>
+                        <p class="explain-card-desc">Purged conversational filler and redundant constraints to cut token consumption.</p>
+                      </div>
+                    </div>
+
+                    <div class="explain-card">
+                      <div class="explain-card-icon" aria-hidden="true">&#9733;</div>
+                      <div class="explain-card-text">
+                        <h4 class="explain-card-title">Preserved Original Intent</h4>
+                        <p class="explain-card-desc">Kept 100% of your domain constraints, core objectives, and requested formats intact.</p>
+                      </div>
+                    </div>
+
+                    <div class="explain-card">
+                      <div class="explain-card-icon" aria-hidden="true">&#10022;</div>
+                      <div class="explain-card-text">
+                        <h4 class="explain-card-title">Added Useful Context</h4>
+                        <p class="explain-card-desc">Structured anti-hallucination guardrails and step-by-step guidance for reliable answers.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Results Footer Actions -->
+                <div class="results-bottom-actions">
+                  <button id="btn-results-save-bottom" class="btn btn-outline" type="button" title="Save this prompt to your collection">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                      <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                      <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                    <span>Save Prompt</span>
+                  </button>
+
+                  <button id="btn-results-copy-bottom" class="btn btn-primary-gradient" type="button">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span class="copy-label">Copy Prompt</span>
+                  </button>
+
+                  <button id="btn-results-edit-bottom" class="btn btn-outline" type="button">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                    <span>Edit Prompt Inputs</span>
+                  </button>
+
+                  <button id="btn-results-try-again-bottom" class="btn btn-ghost" type="button">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <polyline points="23 4 23 10 17 10"></polyline>
+                      <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                    </svg>
+                    <span>Try Again</span>
+                  </button>
+                </div>
+
+              </div>
+
+              <!-- ============================================================
+                   SERVICE VIEW 1: GENERATE WORKSPACE
+                   ============================================================ -->
+              <div id="view-generate" class="service-view active">
+                
+                <!-- Form Inputs Container (hidden during results state) -->
+                <div id="generate-form-container" class="service-form-container">
+                  <!-- Generate Header -->
+                  <div class="generate-header">
+                    <h2 id="generate-title" class="generate-title">Create a better prompt</h2>
+                    <p id="generate-desc" class="generate-description">
+                      Describe what you want AI to do. AutoPrompt will help structure your idea into an effective prompt.
+                    </p>
+                  </div>
+
+                  <!-- Form Controls: Category Selector & Mode Selector -->
+                  <div class="generate-controls-row">
+                    
+                    <!-- Category Selector (Optional) -->
+                    <div class="control-field category-field">
+                      <label for="prompt-category" class="field-label">
+                        <span>Category</span>
+                        <span class="optional-badge">Optional</span>
+                      </label>
+                      <div class="select-wrapper">
+                        <select id="prompt-category" class="input-select" aria-label="Select optional prompt category">
+                          <option value="" selected>Select a category (optional)</option>
+                          <option value="Education">Education</option>
+                          <option value="Programming">Programming</option>
+                          <option value="Data Science">Data Science</option>
+                          <option value="Graphic Design">Graphic Design</option>
+                          <option value="Content Creation">Content Creation</option>
+                          <option value="Business">Business</option>
+                          <option value="Research">Research</option>
+                          <option value="Daily Productivity">Daily Productivity</option>
+                          <option value="Other">Other</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <!-- Mode Selector (Quick vs Advanced) -->
+                    <div class="control-field mode-field">
+                      <span id="mode-selector-label" class="field-label">
+                        <span>Generation Mode</span>
+                      </span>
+                      <div class="mode-toggle-group" role="radiogroup" aria-labelledby="mode-selector-label">
+                        <button 
+                          type="button" 
+                          class="mode-toggle-btn active" 
+                          id="mode-quick" 
+                          role="radio" 
+                          aria-checked="true" 
+                          data-mode="quick"
+                        >
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                          </svg>
+                          <span>Quick Mode</span>
+                        </button>
+                        
+                        <button 
+                          type="button" 
+                          class="mode-toggle-btn" 
+                          id="mode-advanced" 
+                          role="radio" 
+                          aria-checked="false" 
+                          data-mode="advanced"
+                        >
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <line x1="4" y1="21" x2="4" y2="14"></line>
+                            <line x1="4" y1="10" x2="4" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12" y2="3"></line>
+                            <line x1="20" y1="21" x2="20" y2="16"></line>
+                            <line x1="20" y1="12" x2="20" y2="3"></line>
+                            <line x1="1" y1="14" x2="7" y2="14"></line>
+                            <line x1="9" y1="8" x2="15" y2="8"></line>
+                            <line x1="17" y1="16" x2="23" y2="16"></line>
+                          </svg>
+                          <span>Advanced Mode</span>
+                        </button>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <!-- Main Idea Input Area -->
+                  <div class="prompt-input-section">
+                    <div class="textarea-header">
+                      <label for="prompt-main-idea" class="field-label">
+                        <span>Your Idea / Task</span>
+                        <span class="required-badge">Required</span>
+                      </label>
+                      <span id="char-counter" class="char-counter" aria-live="polite">0 characters</span>
+                    </div>
+
+                    <div class="textarea-wrapper">
+                      <textarea 
+                        id="prompt-main-idea" 
+                        class="prompt-textarea" 
+                        rows="5" 
+                        placeholder="Example: I want to learn Python programming from beginner to advanced..."
+                        aria-required="true"
+                        aria-describedby="validation-error"
+                      ></textarea>
+                    </div>
+
+                    <!-- Validation Error Message Display -->
+                    <div id="validation-error" class="validation-error" role="alert" aria-live="assertive" hidden>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                      </svg>
+                      <span id="validation-error-text">Please describe your idea before generating.</span>
+                    </div>
+                  </div>
+
+                  <!-- Advanced Mode Expandable Section (Optional fields) -->
+                  <div id="advanced-fields-section" class="advanced-section collapsed" aria-hidden="true">
+                    <div class="advanced-section-inner">
+                      <div class="advanced-header">
+                        <span class="advanced-section-title">Advanced Prompt Parameters</span>
+                        <span class="advanced-section-subtitle">All parameters below are completely optional and help refine specific model behaviors.</span>
+                      </div>
+
+                      <div class="advanced-grid">
+                        <div class="control-field">
+                          <label for="adv-role" class="field-label">
+                            <span>Role / Persona</span>
+                            <span class="optional-badge">Optional</span>
+                          </label>
+                          <input 
+                            type="text" 
+                            id="adv-role" 
+                            class="input-control" 
+                            placeholder="e.g., Senior Software Architect, Expert Python Instructor"
+                          >
+                        </div>
+
+                        <div class="control-field">
+                          <label for="adv-objective" class="field-label">
+                            <span>Objective</span>
+                            <span class="optional-badge">Optional</span>
+                          </label>
+                          <input 
+                            type="text" 
+                            id="adv-objective" 
+                            class="input-control" 
+                            placeholder="e.g., Design a structured 10-week learning syllabus with code exercises"
+                          >
+                        </div>
+
+                        <div class="control-field span-full">
+                          <label for="adv-context" class="field-label">
+                            <span>Context</span>
+                            <span class="optional-badge">Optional</span>
+                          </label>
+                          <textarea 
+                            id="adv-context" 
+                            class="input-control textarea-sm" 
+                            rows="2" 
+                            placeholder="e.g., Target student has foundational knowledge of basic programming, prefers hands-on practice over theory"
+                          ></textarea>
+                        </div>
+
+                        <div class="control-field">
+                          <label for="adv-constraints" class="field-label">
+                            <span>Constraints</span>
+                            <span class="optional-badge">Optional</span>
+                          </label>
+                          <input 
+                            type="text" 
+                            id="adv-constraints" 
+                            class="input-control" 
+                            placeholder="e.g., Maximum 500 words, prioritize Python 3.12 syntax, no paid dependencies"
+                          >
+                        </div>
+
+                        <div class="control-field">
+                          <label for="adv-format" class="field-label">
+                            <span>Expected Output Format</span>
+                            <span class="optional-badge">Optional</span>
+                          </label>
+                          <input 
+                            type="text" 
+                            id="adv-format" 
+                            class="input-control" 
+                            placeholder="e.g., Markdown table with Week, Topic, Practical Project, and Key Deliverables"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Generate Action Bar -->
+                  <div class="generate-actions-bar">
+                    <button id="btn-generate-prompt" class="btn btn-primary-gradient btn-generate" type="button">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                      </svg>
+                      <span class="btn-label">Generate Prompt</span>
+                    </button>
+
+                    <button id="btn-clear-generate" class="btn btn-ghost" type="button" aria-label="Clear all inputs">
+                      Clear Inputs
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- ============================================================
+                   SERVICE VIEW 2: OPTIMIZE WORKSPACE
+                   ============================================================ -->
+              <div id="view-optimize" class="service-view" hidden>
+                
+                <!-- Optimize Form Container -->
+                <div id="optimize-form-container" class="service-form-container">
+                  <div class="generate-header">
+                    <h2 class="generate-title">Optimize an existing prompt</h2>
+                    <p class="generate-description">
+                      Paste your raw prompt to analyze token inefficiencies, eliminate bloat, and refine accuracy.
+                    </p>
+                  </div>
+
+                  <!-- Mode Selector (Quick vs Advanced) -->
+                  <div class="generate-controls-row">
+                    <div class="control-field mode-field span-full">
+                      <span id="mode-selector-label-optimize" class="field-label">
+                        <span>Optimization Mode</span>
+                      </span>
+                      <div class="mode-toggle-group" role="radiogroup" aria-labelledby="mode-selector-label-optimize">
+                        <button 
+                          type="button" 
+                          class="mode-toggle-btn active" 
+                          id="mode-quick-optimize" 
+                          role="radio" 
+                          aria-checked="true" 
+                          data-mode="quick"
+                        >
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                          </svg>
+                          <span>Quick Mode</span>
+                        </button>
+                        
+                        <button 
+                          type="button" 
+                          class="mode-toggle-btn" 
+                          id="mode-advanced-optimize" 
+                          role="radio" 
+                          aria-checked="false" 
+                          data-mode="advanced"
+                        >
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <line x1="4" y1="21" x2="4" y2="14"></line>
+                            <line x1="4" y1="10" x2="4" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12" y2="3"></line>
+                            <line x1="20" y1="21" x2="20" y2="16"></line>
+                            <line x1="20" y1="12" x2="20" y2="3"></line>
+                            <line x1="1" y1="14" x2="7" y2="14"></line>
+                            <line x1="9" y1="8" x2="15" y2="8"></line>
+                            <line x1="17" y1="16" x2="23" y2="16"></line>
+                          </svg>
+                          <span>Advanced Mode</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Optimize Input Section -->
+                  <div class="prompt-input-section">
+                    <div class="textarea-header">
+                      <label for="prompt-optimize-input" class="field-label">
+                        <span>Original Prompt</span>
+                        <span class="required-badge">Required</span>
+                      </label>
+                      <span id="char-counter-optimize" class="char-counter" aria-live="polite">0 characters</span>
+                    </div>
+
+                    <div class="textarea-wrapper">
+                      <textarea 
+                        id="prompt-optimize-input" 
+                        class="prompt-textarea" 
+                        rows="6" 
+                        placeholder="Paste your existing prompt here to compress and optimize..."
+                        aria-required="true"
+                        aria-describedby="validation-error-optimize"
+                      ></textarea>
+                    </div>
+
+                    <!-- Optimize Validation Message -->
+                    <div id="validation-error-optimize" class="validation-error" role="alert" aria-live="assertive" hidden>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                      </svg>
+                      <span id="validation-error-optimize-text">Please paste a prompt to optimize.</span>
+                    </div>
+                  </div>
+
+                  <!-- Advanced Mode Expandable Section (Optional instructions) -->
+                  <div id="advanced-fields-section-optimize" class="advanced-section collapsed" aria-hidden="true">
+                    <div class="advanced-section-inner">
+                      <div class="advanced-header">
+                        <span class="advanced-section-title">Advanced Optimization Parameters</span>
+                        <span class="advanced-section-subtitle">Provide optional custom refinement instructions for the model.</span>
+                      </div>
+                      <div class="control-field span-full">
+                        <label for="adv-optimize-instructions" class="field-label">
+                          <span>Refinement Instructions</span>
+                          <span class="optional-badge">Optional</span>
+                        </label>
+                        <input 
+                          type="text" 
+                          id="adv-optimize-instructions" 
+                          class="input-control" 
+                          placeholder="e.g., Focus on technical precision and eliminate all fluff."
+                        >
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Optimize Actions Bar -->
+                  <div class="generate-actions-bar">
+                    <button id="btn-optimize-prompt" class="btn btn-primary-gradient btn-generate" type="button">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                      </svg>
+                      <span class="btn-label">Optimize Prompt</span>
+                    </button>
+
+                    <button id="btn-clear-optimize" class="btn btn-ghost" type="button" aria-label="Clear optimize inputs">
+                      Clear Inputs
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- Workspace Footer Info & Dev Test Toggle -->
+            <div class="workspace-card-footer">
+              <span class="footer-tip">
+                <span class="tip-label">Live Backend:</span> Connected to FastAPI backend at localhost:8000 &bull; Gemini API powered.
+              </span>
+
+              <!-- Dev Test Error Toggle -->
+              <label class="dev-error-toggle" title="Check this to test error state and retry handling" for="toggle-sim-error">
+                <input type="checkbox" id="toggle-sim-error" aria-label="Simulate Error (Dev Test)">
+                <span class="dev-toggle-label">Simulate Error (Dev Test)</span>
+              </label>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         PHASE 6: PERSISTENCE MODALS & TOAST NOTIFICATION SYSTEM
+         ==================================================================== -->
+
+    <!-- 1. Save Prompt Modal -->
+    <div id="modal-save-prompt" class="modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="modal-save-title">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+              <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+            <h3 id="modal-save-title" class="modal-title">Save Prompt to Library</h3>
+          </div>
+          <button id="btn-close-save-modal" class="modal-close-btn" type="button" aria-label="Close dialog">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <form id="form-save-prompt" onsubmit="return false;">
+            <input type="hidden" id="input-save-prompt-operation-type" value="generate">
+            <div class="form-group" style="margin-bottom: var(--space-4);">
+              <label for="input-save-prompt-title" class="form-label" style="font-weight: 600; font-size: 0.875rem; margin-bottom: var(--space-1); display: block;">
+                Prompt Title <span class="required" style="color: var(--danger-color);">*</span>
+              </label>
+              <input type="text" id="input-save-prompt-title" class="form-input" style="width: 100%; padding: 0.625rem 0.75rem; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); background: var(--bg-input); color: var(--text-primary);" placeholder="e.g. Telecommunications Churn Analytics" required maxlength="255">
+            </div>
+
+            <div class="form-group" style="margin-bottom: var(--space-4);">
+              <label for="select-save-prompt-category" class="form-label" style="font-weight: 600; font-size: 0.875rem; margin-bottom: var(--space-1); display: block;">
+                Domain Category
+              </label>
+              <select id="select-save-prompt-category" class="form-select" style="width: 100%; padding: 0.625rem 0.75rem; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); background: var(--bg-input); color: var(--text-primary);">
+                <option value="General">General</option>
+                <option value="Coding">Coding &amp; Software</option>
+                <option value="Data Science">Data Science &amp; AI</option>
+                <option value="Academic">Academic &amp; Education</option>
+                <option value="Business">Business &amp; Professional</option>
+                <option value="Creative">Creative &amp; Writing</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="preview-save-prompt-content" style="font-weight: 600; font-size: 0.875rem; margin-bottom: var(--space-1); display: block;">
+                Prompt Content Preview
+              </label>
+              <textarea id="preview-save-prompt-content" class="form-textarea" aria-label="Prompt Content Preview" style="width: 100%; height: 140px; font-family: var(--font-sans); font-size: 0.8125rem; padding: 0.5rem 0.75rem; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); background: var(--bg-surface-subtle); color: var(--text-secondary); resize: vertical;" readonly></textarea>
+            </div>
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button id="btn-cancel-save-prompt" class="btn btn-ghost" type="button">Cancel</button>
+          <button id="btn-confirm-save-prompt" class="btn btn-primary-gradient" type="button">
+            Save to Collection
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Saved Prompts View Modal -->
+    <div id="modal-saved-prompts" class="modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="modal-saved-list-title">
+      <div class="modal-dialog modal-dialog-large">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+              <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+            <h3 id="modal-saved-list-title" class="modal-title">Saved Prompts Library</h3>
+          </div>
+          <button id="btn-close-saved-list-modal" class="modal-close-btn" type="button" aria-label="Close dialog">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Search & Filter Toolbar -->
+          <div class="persistence-toolbar">
+            <input type="text" id="input-search-saved" class="persistence-search-input" placeholder="Search saved prompts by title or keyword..." aria-label="Search saved prompts">
+            
+            <select id="select-filter-saved-category" class="persistence-select" aria-label="Filter by category">
+              <option value="">All Categories</option>
+              <option value="General">General</option>
+              <option value="Coding">Coding</option>
+              <option value="Data Science">Data Science</option>
+              <option value="Academic">Academic</option>
+              <option value="Business">Business</option>
+              <option value="Creative">Creative</option>
+            </select>
+
+            <select id="select-filter-saved-operation" class="persistence-select" aria-label="Filter by operation">
+              <option value="">All Operations</option>
+              <option value="generate">Generated Prompts</option>
+              <option value="optimize">Optimized Prompts</option>
+            </select>
+          </div>
+
+          <!-- Loading State -->
+          <div id="saved-prompts-loading" class="persistence-empty-state" hidden>
+            <div class="spinner-orbit" style="margin: 0 auto var(--space-3);" aria-hidden="true"></div>
+            <p class="text-sm text-muted">Loading saved prompts from database...</p>
+          </div>
+
+          <!-- Empty State -->
+          <div id="saved-prompts-empty" class="persistence-empty-state" hidden>
+            <div class="persistence-empty-icon">&#128194;</div>
+            <h4 class="persistence-empty-title">No Saved Prompts Found</h4>
+            <p class="persistence-empty-desc">Generate or optimize a prompt in the workspace, then click "Save Prompt" to start building your library.</p>
+          </div>
+
+          <!-- Prompts List Container -->
+          <div id="saved-prompts-list-container" class="persistence-card-list"></div>
+        </div>
+
+        <div class="modal-footer" style="justify-content: space-between;">
+          <span id="saved-prompts-status-count" class="text-xs text-muted">0 prompts saved</span>
+          <button id="btn-dismiss-saved-list" class="btn btn-ghost" type="button">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Prompt History Modal -->
+    <div id="modal-prompt-history" class="modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="modal-history-title">
+      <div class="modal-dialog modal-dialog-large">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <h3 id="modal-history-title" class="modal-title">Prompt Execution History</h3>
+          </div>
+          <div style="display: flex; align-items: center; gap: var(--space-2);">
+            <button id="btn-trigger-clear-history" class="btn btn-outline btn-sm" type="button" style="color: var(--danger-color); border-color: var(--danger-border);">
+              Clear All History
+            </button>
+            <button id="btn-close-history-modal" class="modal-close-btn" type="button" aria-label="Close history dialog">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="modal-body">
+          <!-- Filter Toolbar -->
+          <div class="persistence-toolbar">
+            <select id="select-filter-history-operation" class="persistence-select" aria-label="Filter history by operation">
+              <option value="">All Operations</option>
+              <option value="generate">Generate Only</option>
+              <option value="optimize">Optimize Only</option>
+            </select>
+          </div>
+
+          <!-- Loading State -->
+          <div id="history-loading" class="persistence-empty-state" hidden>
+            <div class="spinner-orbit" style="margin: 0 auto var(--space-3);" aria-hidden="true"></div>
+            <p class="text-sm text-muted">Retrieving prompt history...</p>
+          </div>
+
+          <!-- Empty State -->
+          <div id="history-empty" class="persistence-empty-state" hidden>
+            <div class="persistence-empty-icon">&#128337;</div>
+            <h4 class="persistence-empty-title">No Execution History</h4>
+            <p class="persistence-empty-desc">Your Generate and Optimize operations will be automatically logged here with exact token metrics.</p>
+          </div>
+
+          <!-- History List Container -->
+          <div id="history-list-container" class="persistence-card-list"></div>
+        </div>
+
+        <div class="modal-footer" style="justify-content: space-between;">
+          <span id="history-status-count" class="text-xs text-muted">0 entries recorded</span>
+          <button id="btn-dismiss-history" class="btn btn-ghost" type="button">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Edit Saved Prompt Modal -->
+    <div id="modal-edit-prompt" class="modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="modal-edit-title">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+            <h3 id="modal-edit-title" class="modal-title">Edit Saved Prompt</h3>
+          </div>
+          <button id="btn-close-edit-modal" class="modal-close-btn" type="button" aria-label="Close dialog">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <form id="form-edit-prompt" onsubmit="return false;">
+            <input type="hidden" id="input-edit-prompt-id">
+            <div class="form-group" style="margin-bottom: var(--space-4);">
+              <label for="input-edit-prompt-title" class="form-label" style="font-weight: 600; font-size: 0.875rem; margin-bottom: var(--space-1); display: block;">
+                Prompt Title <span class="required" style="color: var(--danger-color);">*</span>
+              </label>
+              <input type="text" id="input-edit-prompt-title" class="form-input" style="width: 100%; padding: 0.625rem 0.75rem; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); background: var(--bg-input); color: var(--text-primary);" required maxlength="255">
+            </div>
+
+            <div class="form-group" style="margin-bottom: var(--space-4);">
+              <label for="select-edit-prompt-category" class="form-label" style="font-weight: 600; font-size: 0.875rem; margin-bottom: var(--space-1); display: block;">
+                Domain Category
+              </label>
+              <select id="select-edit-prompt-category" class="form-select" style="width: 100%; padding: 0.625rem 0.75rem; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); background: var(--bg-input); color: var(--text-primary);">
+                <option value="General">General</option>
+                <option value="Coding">Coding &amp; Software</option>
+                <option value="Data Science">Data Science &amp; AI</option>
+                <option value="Academic">Academic &amp; Education</option>
+                <option value="Business">Business &amp; Professional</option>
+                <option value="Creative">Creative &amp; Writing</option>
+              </select>
+            </div>
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button id="btn-cancel-edit-prompt" class="btn btn-ghost" type="button">Cancel</button>
+          <button id="btn-confirm-edit-prompt" class="btn btn-primary-gradient" type="button">Save Changes</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Reusable Destructive Confirmation Modal -->
+    <div id="modal-confirm-action" class="modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="modal-confirm-title">
+      <div class="modal-dialog modal-dialog-sm">
+        <div class="modal-header">
+          <h3 id="modal-confirm-title" class="modal-title" style="color: var(--danger-color);">Confirm Action</h3>
+          <button id="btn-close-confirm-modal" class="modal-close-btn" type="button" aria-label="Close confirmation dialog">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <p id="modal-confirm-message" style="margin: 0; font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.5;">
+            Are you sure you want to proceed with this action? This cannot be undone.
+          </p>
+        </div>
+
+        <div class="modal-footer">
+          <button id="btn-cancel-confirm" class="btn btn-ghost" type="button">Cancel</button>
+          <button id="btn-proceed-confirm" class="btn btn-outline" type="button" style="color: #FFFFFF; background-color: var(--danger-color); border-color: var(--danger-color);">
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Application Footer -->
+    <footer class="app-footer" role="contentinfo">
+      <div class="footer-container">
+        <p class="text-muted text-sm">
+          &copy; 2026 AutoPrompt &bull; Less Tokens. Better Prompts. Smarter Results.
+        </p>
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>

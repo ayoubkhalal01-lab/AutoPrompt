@@ -1,0 +1,447 @@
+/**
+ * AutoPrompt — Interactive Prototype
+ * Responsive Stylesheet (responsive.css)
+ * 
+ * Breakpoints:
+ * - Desktop:   > 1024px
+ * - Tablet:    768px – 1024px
+ * - Mobile:    < 768px
+ * - Small:     < 480px
+ */
+
+/* ==========================================================================
+   1. Tablet Devices (max-width: 1024px)
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  :root {
+    --header-height: 64px;
+    --workspace-max-width: 100%;
+  }
+
+  .header-container {
+    padding: 0 var(--space-4);
+  }
+
+  .app-main {
+    padding: var(--space-6) var(--space-4) var(--space-12);
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .workspace-card {
+    border-radius: var(--radius-lg);
+  }
+
+  .workspace-body {
+    padding: var(--space-6) var(--space-6);
+  }
+
+  /* Results view in tablet */
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .results-header-block {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .results-top-actions {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+}
+
+/* ==========================================================================
+   2. Mobile Devices (max-width: 768px)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  :root {
+    --header-height: 60px;
+  }
+
+  /* Prevent any horizontal page overflow */
+  body {
+    overflow-x: hidden;
+  }
+
+  .header-container {
+    padding: 0 var(--space-3);
+  }
+
+  .brand-wordmark {
+    font-size: 1.2rem;
+  }
+
+  .header-actions {
+    gap: var(--space-2);
+  }
+
+  .lang-select {
+    padding: 0.35rem 1.4rem 0.35rem 1.75rem;
+    font-size: 0.75rem;
+  }
+
+  .lang-icon {
+    left: 8px;
+    width: 14px;
+    height: 14px;
+  }
+
+  .btn-login {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .btn-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .app-main {
+    padding: var(--space-5) var(--space-3) var(--space-10);
+  }
+
+  .dashboard-container {
+    gap: var(--space-5);
+  }
+
+  /* Hero Section scaling */
+  .hero-section {
+    padding: var(--space-1) 0;
+  }
+
+  .hero-badge {
+    padding: 0.25rem 0.65rem;
+    margin-bottom: var(--space-2);
+  }
+
+  .badge-text {
+    font-size: 0.72rem;
+  }
+
+  .hero-title {
+    font-size: 1.5rem;
+    line-height: 1.25;
+    margin-bottom: var(--space-2);
+  }
+
+  .hero-subtitle {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  /* Service Selectors as full-width tabs on mobile */
+  .service-selector-bar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: var(--space-3);
+    gap: var(--space-2);
+  }
+
+  .service-tabs {
+    width: 100%;
+    display: flex;
+  }
+
+  .service-tab {
+    flex: 1;
+    justify-content: center;
+    padding: 0.55rem var(--space-2);
+    font-size: 0.8125rem;
+  }
+
+  .service-status-pill {
+    justify-content: center;
+    font-size: 0.72rem;
+  }
+
+  /* Workspace Body adjustments */
+  .workspace-body {
+    padding: var(--space-5) var(--space-4);
+  }
+
+  .generate-title {
+    font-size: 1.25rem;
+  }
+
+  .generate-description {
+    font-size: 0.875rem;
+  }
+
+  .generate-controls-row {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .advanced-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .prompt-textarea {
+    min-height: 120px;
+    font-size: 0.9rem;
+  }
+
+  .generate-actions-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-2);
+  }
+
+  .btn-generate {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .generate-actions-bar .btn-ghost {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Unified Processing Card on Mobile */
+  .processing-overlay {
+    padding: var(--space-8) var(--space-2);
+  }
+
+  .processing-card {
+    padding: var(--space-6) var(--space-4);
+  }
+
+  .processing-main-msg {
+    font-size: 1.125rem;
+  }
+
+  .processing-support-msg {
+    font-size: 0.85rem;
+  }
+
+  /* Error Feedback Card on Mobile */
+  .state-feedback-card {
+    padding: var(--space-6) var(--space-4);
+  }
+
+  .state-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .state-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* ========================================================================
+     Results View Mobile Adjustments
+     ======================================================================== */
+  .results-view {
+    gap: var(--space-6);
+  }
+
+  .results-title {
+    font-size: 1.35rem;
+  }
+
+  .results-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .results-header-block {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+
+  .results-top-actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-2);
+  }
+
+  .results-top-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Metric cards stacked on mobile */
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2);
+  }
+
+  .metric-card {
+    padding: var(--space-3);
+  }
+
+  .metric-value {
+    font-size: 1.25rem;
+  }
+
+  /* Comparison grid STACKED on mobile */
+  .comparison-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .comparison-section-header {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  /* Explanations grid */
+  .explanations-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Results bottom actions */
+  .results-bottom-actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .results-bottom-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .workspace-card-footer {
+    padding: var(--space-3) var(--space-4);
+    text-align: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .footer-tip {
+    font-size: 0.75rem;
+  }
+
+  /* ========================================================================
+     Navigation & Persistence Responsive Adjustments
+     ======================================================================== */
+  .nav-btn-persistence span:not(.badge-count) {
+    display: none;
+  }
+
+  .nav-btn-persistence {
+    padding: 0.35rem 0.5rem;
+    min-width: 32px;
+    justify-content: center;
+  }
+
+  /* Modal Dialog Responsive Sizing */
+  .modal-backdrop {
+    padding: var(--space-2);
+  }
+
+  .modal-dialog {
+    max-height: 92vh;
+    border-radius: var(--radius-lg);
+  }
+
+  .modal-header {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .modal-body {
+    padding: var(--space-4);
+  }
+
+  .modal-footer {
+    padding: var(--space-3) var(--space-4);
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  /* Persistence Toolbar & Cards */
+  .persistence-toolbar {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .persistence-search-input {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .persistence-select {
+    width: 100%;
+  }
+
+  .persistence-card-actions {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  /* Toast Notification Placement on Mobile */
+  .toast-container {
+    left: var(--space-3);
+    right: var(--space-3);
+    bottom: var(--space-3);
+    align-items: center;
+  }
+
+  .toast {
+    max-width: 100%;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ==========================================================================
+   3. Small Mobile Devices (max-width: 480px)
+   ========================================================================== */
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 1.35rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .brand-wordmark {
+    font-size: 1.1rem;
+  }
+
+  .service-tab span {
+    font-size: 0.775rem;
+  }
+
+  .mode-toggle-btn span {
+    font-size: 0.75rem;
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   4. Accessibility & Reduced Motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

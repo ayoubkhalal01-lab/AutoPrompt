@@ -1,0 +1,1556 @@
+{
+  "metadata": {
+    "timestamp": "2026-11-04 00:34:34Z",
+    "mode": "reference",
+    "model": "reference_gold_standard",
+    "total_prompts": 16,
+    "live_api_calls_made": 0
+  },
+  "aggregate_metrics": {
+    "overall_pass_rate_pct": 100.0,
+    "overall_average_score": 94.0,
+    "passed_prompts": 16,
+    "failed_prompts": 0
+  },
+  "category_performance": {
+    "General": {
+      "prompt_count": 2,
+      "average_score": 100.0,
+      "min_score": 100.0,
+      "max_score": 100.0
+    },
+    "Coding": {
+      "prompt_count": 2,
+      "average_score": 97.0,
+      "min_score": 94.0,
+      "max_score": 100.0
+    },
+    "Data Science": {
+      "prompt_count": 2,
+      "average_score": 86.2,
+      "min_score": 85.0,
+      "max_score": 87.5
+    },
+    "Academic": {
+      "prompt_count": 2,
+      "average_score": 95.0,
+      "min_score": 90.0,
+      "max_score": 100.0
+    },
+    "Business": {
+      "prompt_count": 2,
+      "average_score": 95.0,
+      "min_score": 90.0,
+      "max_score": 100.0
+    },
+    "Creative": {
+      "prompt_count": 2,
+      "average_score": 93.8,
+      "min_score": 87.5,
+      "max_score": 100.0
+    },
+    "Ambiguous": {
+      "prompt_count": 2,
+      "average_score": 88.8,
+      "min_score": 87.5,
+      "max_score": 90.0
+    },
+    "Already Concise": {
+      "prompt_count": 2,
+      "average_score": 95.8,
+      "min_score": 91.7,
+      "max_score": 100.0
+    }
+  },
+  "token_efficiency_analysis": {
+    "total_optimize_prompts": 9,
+    "compression_prompts_count": 1,
+    "expansion_prompts_count": 8,
+    "neutral_prompts_count": 0,
+    "explanation": "Token expansion is expected and honest when prompts lack crucial guardrails, context, or deliverables. Concise prompts are preserved without unnecessary inflation."
+  },
+  "detailed_results": [
+    {
+      "prompt_id": "gen_general_01",
+      "category": "General",
+      "operation": "generate",
+      "composite_score": 100.0,
+      "passed": true,
+      "token_metrics": {
+        "input_tokens": 30,
+        "output_tokens": 329,
+        "expansion_ratio": 10.97
+      },
+      "dimensions": {
+        "structure": {
+          "name": "Structure & Organization",
+          "weight": 0.25,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "found": [
+              "role",
+              "context",
+              "objective",
+              "instructions",
+              "output_format",
+              "constraints"
+            ],
+            "missing": []
+          }
+        },
+        "intent": {
+          "name": "Intent & Concept Preservation",
+          "weight": 0.25,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "matched": [
+              "meeting",
+              "executive summary",
+              "action item",
+              "owner",
+              "deadline",
+              "status"
+            ],
+            "missing": []
+          }
+        },
+        "constraints": {
+          "name": "Constraint Adherence & Guardrails",
+          "weight": 0.2,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "checks": [
+              {
+                "constraint": "Include owner and deadline columns",
+                "adhered": true
+              },
+              {
+                "constraint": "Separate decisions from discussion points",
+                "adhered": true
+              }
+            ],
+            "violations": []
+          }
+        },
+        "tokens": {
+          "name": "Token Discipline & Efficiency",
+          "weight": 0.15,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "input_tokens": 30,
+            "output_tokens": 329
+          }
+        },
+        "clarity": {
+          "name": "Clarity, Usability & Directness",
+          "weight": 0.15,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "has_headings": true,
+            "has_steps": true
+          }
+        }
+      },
+      "diagnostics": [],
+      "response_time_ms": 0,
+      "evaluated_text": "## Role / Persona\nYou are an executive Chief of Staff and technical project manager.\n\n## Context & Background\nYou are reviewing raw meeting transcripts and notes from 45-minute project status syncs involving cross-functional stakeholders.\n\n## Objective\nDistill the meeting transcript into a concise executive summary and an actionable task matrix.\n\n## Instructions\n1. Extract 3-5 high-level executive bullet points focusing on major progress and milestones achieved.\n2. Identify all blockers, risks, and dependencies highlighted during the meeting.\n3. Structure an Action Items table with exact headers: `Task Description`, `Owner`, `Deadline`, `Priority (High/Med/Low)`.\n4. Capture any deferred or unassigned topics in a dedicated Follow-ups section.\n\n## Expected Output Format\n- **Executive Summary**: 3 to 5 bullet points.\n- **Key Decisions Made**: Bulleted list.\n- **Action Items Matrix**: Markdown table with columns: `Task`, `Owner`, `Deadline`, `Priority`.\n- **Risks & Blockers**: Bulleted list.\n\n## Constraints & Guardrails\n- Rely strictly on facts stated in the provided transcript.\n- If an action item does not specify an owner or deadline, mark it as `[TBD]`.\n- Maintain neutral, professional business prose without conversational filler."
+    },
+    {
+      "prompt_id": "opt_general_02",
+      "category": "General",
+      "operation": "optimize",
+      "composite_score": 100.0,
+      "passed": true,
+      "token_metrics": {
+        "original_tokens": 185,
+        "optimized_tokens": 152,
+        "tokens_saved": 33,
+        "reduction_percentage": 17.8,
+        "conciseness_expectation": "compress"
+      },
+      "dimensions": {
+        "intent": {
+          "name": "Semantic & Intent Preservation",
+          "weight": 0.3,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "matched": [
+              "incident",
+              "status",
+              "workaround",
+              "update"
+            ],
+            "missing": []
+          }
+        },
+        "constraints": {
+          "name": "Constraint Preservation & Guardrails",
+          "weight": 0.25,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "checks": [
+              {
+                "constraint": "State current outage impact",
+                "adhered": true
+              },
+              {
+                "constraint": "Include investigation status and next update time",
+                "adhered": true
+              }
+            ]
+          }
+        },
+        "tokens": {
+          "name": "Token Discipline & Expansion Policy",
+          "weight": 0.2,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "expectation": "compress",
+            "original_tokens": 185,
+            "optimized_tokens": 152,
+            "tokens_saved": 33,
+            "reduction_percentage": 17.8
+          }
+        },
+        "clarity": {
+          "name": "Clarity & Readability",
+          "weight": 0.15,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "has_structured_points": true
+          }
+        },
+        "filler": {
+          "name": "Preamble & Filler Elimination",
+          "weight": 0.1,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "clean_preamble": true
+          }
+        }
+      },
+      "diagnostics": [],
+      "response_time_ms": 0,
+      "evaluated_text": "Write an internal incident alert email notifying the engineering and product teams of an active server outage.\n\nStructure:\n1. **Subject**: [Urgent] Service Outage: Backend Services Investigation Underway\n2. **Impact**: Summarize currently degraded or inaccessible internal tools\n3. **Current Status**: Brief explanation of active triage efforts\n4. **Workaround**: Immediate fallback steps for affected teams (if any)\n5. **Next Update**: Exact window for next status communication (e.g. within 30 minutes)\n\nTone: Transparent, calm, and professional. Keep length under 120 words."
+    },
+    {
+      "prompt_id": "gen_coding_01",
+      "category": "Coding",
+      "operation": "generate",
+      "composite_score": 100.0,
+      "passed": true,
+      "token_metrics": {
+        "input_tokens": 11,
+        "output_tokens": 407,
+        "expansion_ratio": 37.0
+      },
+      "dimensions": {
+        "structure": {
+          "name": "Structure & Organization",
+          "weight": 0.25,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "found": [
+              "role",
+              "context",
+              "objective",
+              "instructions",
+              "output_format",
+              "constraints"
+            ],
+            "missing": []
+          }
+        },
+        "intent": {
+          "name": "Intent & Concept Preservation",
+          "weight": 0.25,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "matched": [
+              "thread-safe",
+              "LRU cache",
+              "Python",
+              "lock",
+              "O(1)",
+              "type hints",
+              "unit tests"
+            ],
+            "missing": []
+          }
+        },
+        "constraints": {
+          "name": "Constraint Adherence & Guardrails",
+          "weight": 0.2,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "checks": [
+              {
+                "constraint": "Require threading.Lock or RLock",
+                "adhered": true
+              },
+              {
+                "constraint": "Must achieve O(1) get and put time complexity",
+                "adhered": true
+              },
+              {
+                "constraint": "Include type annotations and docstrings",
+                "adhered": true
+              }
+            ],
+            "violations": []
+          }
+        },
+        "tokens": {
+          "name": "Token Discipline & Efficiency",
+          "weight": 0.15,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "input_tokens": 11,
+            "output_tokens": 407
+          }
+        },
+        "clarity": {
+          "name": "Clarity, Usability & Directness",
+          "weight": 0.15,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "has_headings": true,
+            "has_steps": true
+          }
+        }
+      },
+      "diagnostics": [],
+      "response_time_ms": 0,
+      "evaluated_text": "## Role / Persona\nYou are a Principal Systems Engineer specializing in concurrent data structures and Python runtime internals.\n\n## Context & Background\nYou are developing an in-memory caching layer for a high-concurrency microservice where multiple worker threads concurrently read and evict cached entries.\n\n## Objective\nImplement a thread-safe Least Recently Used (LRU) Cache class in Python utilizing standard library primitives.\n\n## Instructions\n1. Design the `LRUCache[K, V]` class with a fixed maximum capacity initialized via constructor `__init__(capacity: int)`.\n2. Implement `get(key: K) -> Optional[V]` in O(1) time complexity, updating the node's recency.\n3. Implement `put(key: K, value: V) -> None` in O(1) time complexity, evicting the least recently accessed item when capacity is exceeded.\n4. Protect internal state mutations using `threading.RLock()` via context managers to guarantee thread safety.\n5. Provide a standalone `pytest` test suite verifying concurrent access using `concurrent.futures.ThreadPoolExecutor`.\n\n## Expected Output Format\n- Fully typed Python code snippet (`typing.Generic`, `threading`, `collections.OrderedDict` or doubly-linked list with hash map).\n- Docstrings explaining concurrency guarantees and time/space complexity.\n- Pytest unit tests demonstrating thread safety under high load.\n\n## Constraints & Guardrails\n- Use only standard library modules (no external packages).\n- Handle edge cases: capacity <= 0, repeated key overwrites, non-existent key retrieval.\n- Zero race conditions or deadlocks."
+    },
+    {
+      "prompt_id": "opt_coding_02",
+      "category": "Coding",
+      "operation": "optimize",
+      "composite_score": 94.0,
+      "passed": true,
+      "token_metrics": {
+        "original_tokens": 29,
+        "optimized_tokens": 168,
+        "tokens_saved": -139,
+        "reduction_percentage": -479.3,
+        "conciseness_expectation": "expand_for_structure"
+      },
+      "dimensions": {
+        "intent": {
+          "name": "Semantic & Intent Preservation",
+          "weight": 0.3,
+          "score": 80.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "matched": [
+              "python",
+              "csv",
+              "filter",
+              "streaming"
+            ],
+            "missing": [
+              "age > 30"
+            ]
+          }
+        },
+        "constraints": {
+          "name": "Constraint Preservation & Guardrails",
+          "weight": 0.25,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "checks": [
+              {
+                "constraint": "Use csv.DictReader / csv.DictWriter",
+                "adhered": true
+              },
+              {
+                "constraint": "Handle missing/malformed age fields gracefully",
+                "adhered": true
+              }
+            ]
+          }
+        },
+        "tokens": {
+          "name": "Token Discipline & Expansion Policy",
+          "weight": 0.2,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "expectation": "expand_for_structure",
+            "original_tokens": 29,
+            "optimized_tokens": 168,
+            "tokens_saved": -139,
+            "reduction_percentage": -479.3
+          }
+        },
+        "clarity": {
+          "name": "Clarity & Readability",
+          "weight": 0.15,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "has_structured_points": true
+          }
+        },
+        "filler": {
+          "name": "Preamble & Filler Elimination",
+          "weight": 0.1,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "clean_preamble": true
+          }
+        }
+      },
+      "diagnostics": [
+        "Intent: Missing core concepts: age > 30"
+      ],
+      "response_time_ms": 0,
+      "evaluated_text": "Write a robust Python 3 script that reads an input CSV file, filters records where the numeric `age` column is strictly greater than 30, and writes the qualifying rows to a new output CSV file.\n\nRequirements:\n1. Use standard library `csv.DictReader` and `csv.DictWriter` for streaming line-by-line processing without loading the entire dataset into memory.\n2. Accept input and output file paths via command-line arguments using `argparse`.\n3. Handle edge cases: missing `age` field, non-numeric values, empty rows, and preserve original header order.\n4. Include logging for rows processed, qualifying rows written, and skipped invalid rows."
+    },
+    {
+      "prompt_id": "gen_datascience_01",
+      "category": "Data Science",
+      "operation": "generate",
+      "composite_score": 85.0,
+      "passed": true,
+      "token_metrics": {
+        "input_tokens": 33,
+        "output_tokens": 387,
+        "expansion_ratio": 11.73
+      },
+      "dimensions": {
+        "structure": {
+          "name": "Structure & Organization",
+          "weight": 0.25,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "found": [
+              "role",
+              "context",
+              "objective",
+              "instructions",
+              "output_format",
+              "constraints"
+            ],
+            "missing": []
+          }
+        },
+        "intent": {
+          "name": "Intent & Concept Preservation",
+          "weight": 0.25,
+          "score": 80.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "matched": [
+              "fraud detection",
+              "imbalanced",
+              "precision-recall",
+              "cost-sensitive"
+            ],
+            "missing": [
+              "false positives"
+            ]
+          }
+        },
+        "constraints": {
+          "name": "Constraint Adherence & Guardrails",
+          "weight": 0.2,
+          "score": 50.0,
+          "max_score": 100.0,
+          "passed": false,
+          "details": {
+            "checks": [
+              {
+                "constraint": "Focus on extreme class imbalance",
+                "adhered": true
+              },
+              {
+                "constraint": "Quantify dollar cost of false negatives vs false positives",
+                "adhered": false
+              }
+            ],
+            "violations": []
+          }
+        },
+        "tokens": {
+          "name": "Token Discipline & Efficiency",
+          "weight": 0.15,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "input_tokens": 33,
+            "output_tokens": 387
+          }
+        },
+        "clarity": {
+          "name": "Clarity, Usability & Directness",
+          "weight": 0.15,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "has_headings": true,
+            "has_steps": true
+          }
+        }
+      },
+      "diagnostics": [
+        "Intent: Missing key concepts: false positives"
+      ],
+      "response_time_ms": 0,
+      "evaluated_text": "## Role / Persona\nYou are a Staff Data Scientist specializing in financial risk modeling and extreme class imbalance.\n\n## Context & Background\nIn credit card fraud detection, fraudulent transactions account for less than 0.1% of all volume, rendering standard accuracy and ROC-AUC metrics misleading.\n\n## Objective\nEvaluate candidate binary classification models using cost-sensitive metrics and Precision-Recall analysis to identify the optimal operational decision threshold.\n\n## Instructions\n1. Calculate Precision-Recall Area Under Curve (PR-AUC) and average precision across baseline models (XGBoost, LightGBM, Random Forest).\n2. Formulate a cost utility function: `Total Cost = (FN * Avg_Fraud_Loss) + (FP * Customer_Friction_Cost)`.\n3. Sweep classification probability thresholds from 0.01 to 0.99 to determine the threshold that minimizes financial loss while maintaining acceptable customer review volume.\n4. Provide confusion matrix breakdowns and operational trade-off recommendations.\n\n## Expected Output Format\n- Metric comparison markdown table (`Model`, `PR-AUC`, `Optimal Threshold`, `Total Estimated Cost`).\n- Python code snippet implementing the cost-sensitive threshold search.\n- Risk management interpretation summary.\n\n## Constraints & Guardrails\n- Never evaluate on balanced accuracy.\n- Assume transaction amounts vary; prioritize catching high-dollar fraudulent transactions.\n- Clearly differentiate training, validation, and out-of-time test sets."
+    },
+    {
+      "prompt_id": "opt_datascience_02",
+      "category": "Data Science",
+      "operation": "optimize",
+      "composite_score": 87.5,
+      "passed": true,
+      "token_metrics": {
+        "original_tokens": 28,
+        "optimized_tokens": 223,
+        "tokens_saved": -195,
+        "reduction_percentage": -696.4,
+        "conciseness_expectation": "expand_for_structure"
+      },
+      "dimensions": {
+        "intent": {
+          "name": "Semantic & Intent Preservation",
+          "weight": 0.3,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "matched": [
+              "eda",
+              "customer churn",
+              "correlation",
+              "seaborn"
+            ],
+            "missing": []
+          }
+        },
+        "constraints": {
+          "name": "Constraint Preservation & Guardrails",
+          "weight": 0.25,
+          "score": 50.0,
+          "max_score": 100.0,
+          "passed": false,
+          "details": {
+            "checks": [
+              {
+                "constraint": "Specify correlation methods (Pearson for numeric, Cramér's V or mutual info for categorical)",
+                "adhered": true
+              },
+              {
+                "constraint": "Include visualization best practices",
+                "adhered": false
+              }
+            ]
+          }
+        },
+        "tokens": {
+          "name": "Token Discipline & Expansion Policy",
+          "weight": 0.2,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "expectation": "expand_for_structure",
+            "original_tokens": 28,
+            "optimized_tokens": 223,
+            "tokens_saved": -195,
+            "reduction_percentage": -696.4
+          }
+        },
+        "clarity": {
+          "name": "Clarity & Readability",
+          "weight": 0.15,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "has_structured_points": true
+          }
+        },
+        "filler": {
+          "name": "Preamble & Filler Elimination",
+          "weight": 0.1,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "clean_preamble": true
+          }
+        }
+      },
+      "diagnostics": [],
+      "response_time_ms": 0,
+      "evaluated_text": "Write a Python script to perform Exploratory Data Analysis (EDA) on a tabular customer churn dataset to identify high-signal churn predictors.\n\nTasks:\n1. **Data Inspection**: Load the dataset, check summary statistics, and audit missing or anomalous values.\n2. **Correlation & Dependency Analysis**:\n   - Compute Pearson/Spearman correlation for continuous features against the binary churn target.\n   - Compute Mutual Information or Cramér's V for categorical features against churn.\n3. **Visualizations (Seaborn/Matplotlib)**:\n   - Correlation heatmap of top 10 numeric features.\n   - Stacked bar charts showing churn proportion across categorical variables.\n   - Boxplots / KDE plots comparing continuous feature distributions between churned and active users.\n4. **Output**: Rank features by predictive strength and document actionable findings."
+    },
+    {
+      "prompt_id": "gen_academic_01",
+      "category": "Academic",
+      "operation": "generate",
+      "composite_score": 90.0,
+      "passed": true,
+      "token_metrics": {
+        "input_tokens": 31,
+        "output_tokens": 404,
+        "expansion_ratio": 13.03
+      },
+      "dimensions": {
+        "structure": {
+          "name": "Structure & Organization",
+          "weight": 0.25,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "found": [
+              "role",
+              "context",
+              "objective",
+              "instructions",
+              "output_format",
+              "constraints"
+            ],
+            "missing": []
+          }
+        },
+        "intent": {
+          "name": "Intent & Concept Preservation",
+          "weight": 0.25,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "matched": [
+              "quantum entanglement",
+              "analogy",
+              "high school",
+              "superposition",
+              "no complex math"
+            ],
+            "missing": []
+          }
+        },
+        "constraints": {
+          "name": "Constraint Adherence & Guardrails",
+          "weight": 0.2,
+          "score": 50.0,
+          "max_score": 100.0,
+          "passed": false,
+          "details": {
+            "checks": [
+              {
+                "constraint": "Zero tensor math or bra-ket notation",
+                "adhered": false
+              },
+              {
+                "constraint": "Explain why it is not faster-than-light communication",
+                "adhered": true
+              }
+            ],
+            "violations": []
+          }
+        },
+        "tokens": {
+          "name": "Token Discipline & Efficiency",
+          "weight": 0.15,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "input_tokens": 31,
+            "output_tokens": 404
+          }
+        },
+        "clarity": {
+          "name": "Clarity, Usability & Directness",
+          "weight": 0.15,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "has_headings": true,
+            "has_steps": true
+          }
+        }
+      },
+      "diagnostics": [],
+      "response_time_ms": 0,
+      "evaluated_text": "## Role / Persona\nYou are an award-winning high school physics educator and science communicator.\n\n## Context & Background\nTeaching modern physics concepts to 11th and 12th-grade students who have basic Newtonian mechanics and wave fundamentals but no advanced linear algebra.\n\n## Objective\nExplain the phenomenon of quantum entanglement using intuitive, accurate real-world analogies while debunking common pop-science myths.\n\n## Instructions\n1. Introduce the concept of superposition using a simple interactive scenario (e.g., spinning coins before they land).\n2. Explain entanglement as a shared quantum state between two particles regardless of spatial separation.\n3. Use a clear paired-socks or connected dice analogy, clarifying the critical quantum difference: neither particle had a fixed property until measured.\n4. Address the No-Communication Theorem: clearly explain why entanglement cannot be used to transmit Morse code or messages faster than light.\n5. Provide a 3-question conceptual quiz with answer explanations to test comprehension.\n\n## Expected Output Format\n- **Section 1: The Mystery**: Accessible hook and definition.\n- **Section 2: The Core Analogy**: Step-by-step breakdown.\n- **Section 3: Busting the FTL Myth**: Clear boundary on information transfer.\n- **Section 4: Check Your Understanding**: 3 multiple-choice conceptual questions with explanations.\n\n## Constraints & Guardrails\n- Avoid bra-ket notation, matrices, and differential equations.\n- Keep tone encouraging, vivid, and scientifically rigorous."
+    },
+    {
+      "prompt_id": "opt_academic_02",
+      "category": "Academic",
+      "operation": "optimize",
+      "composite_score": 100.0,
+      "passed": true,
+      "token_metrics": {
+        "original_tokens": 31,
+        "optimized_tokens": 233,
+        "tokens_saved": -202,
+        "reduction_percentage": -651.6,
+        "conciseness_expectation": "expand_for_structure"
+      },
+      "dimensions": {
+        "intent": {
+          "name": "Semantic & Intent Preservation",
+          "weight": 0.3,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "matched": [
+              "attention is all you need",
+              "transformer",
+              "self-attention",
+              "slides breakdown"
+            ],
+            "missing": []
+          }
+        },
+        "constraints": {
+          "name": "Constraint Preservation & Guardrails",
+          "weight": 0.25,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "checks": [
+              {
+                "constraint": "Include slide-by-slide structure",
+                "adhered": true
+              },
+              {
+                "constraint": "Highlight why self-attention replaced recurrence (RNN/LSTM)",
+                "adhered": true
+              }
+            ]
+          }
+        },
+        "tokens": {
+          "name": "Token Discipline & Expansion Policy",
+          "weight": 0.2,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "expectation": "expand_for_structure",
+            "original_tokens": 31,
+            "optimized_tokens": 233,
+            "tokens_saved": -202,
+            "reduction_percentage": -651.6
+          }
+        },
+        "clarity": {
+          "name": "Clarity & Readability",
+          "weight": 0.15,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "has_structured_points": true
+          }
+        },
+        "filler": {
+          "name": "Preamble & Filler Elimination",
+          "weight": 0.1,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "clean_preamble": true
+          }
+        }
+      },
+      "diagnostics": [],
+      "response_time_ms": 0,
+      "evaluated_text": "Generate a structured 10-slide presentation outline synthesizing the seminal paper 'Attention Is All You Need' (Vaswani et al., 2017) for a graduate-level Machine Learning course.\n\nFor each slide, provide:\n- **Slide Title**\n- **Core Concepts** (2-3 concise bullet points)\n- **Visual / Diagram Suggestion** (e.g., scaled dot-product attention architecture, multi-head mechanism)\n- **Presenter Talking Points** (30-45 seconds of spoken commentary)\n\nRequired Slide Coverage:\n1. Motivation: Limitations of Recurrent (RNN/LSTM) and Convolutional models (sequential bottleneck).\n2. Core Innovation: Eliminating recurrence via pure Self-Attention mechanisms.\n3. Architecture: Scaled Dot-Product and Multi-Head Attention mechanics.\n4. Positional Encoding: Preserving sequence order without recurrence.\n5. Empirical Results & Historical Impact: WMT benchmark leaps and foundation for modern LLMs."
+    },
+    {
+      "prompt_id": "gen_business_01",
+      "category": "Business",
+      "operation": "generate",
+      "composite_score": 90.0,
+      "passed": true,
+      "token_metrics": {
+        "input_tokens": 21,
+        "output_tokens": 405,
+        "expansion_ratio": 19.29
+      },
+      "dimensions": {
+        "structure": {
+          "name": "Structure & Organization",
+          "weight": 0.25,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "found": [
+              "role",
+              "context",
+              "objective",
+              "instructions",
+              "output_format",
+              "constraints"
+            ],
+            "missing": []
+          }
+        },
+        "intent": {
+          "name": "Intent & Concept Preservation",
+          "weight": 0.25,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "matched": [
+              "enterprise saas",
+              "value proposition",
+              "roi",
+              "security",
+              "pilot"
+            ],
+            "missing": []
+          }
+        },
+        "constraints": {
+          "name": "Constraint Adherence & Guardrails",
+          "weight": 0.2,
+          "score": 50.0,
+          "max_score": 100.0,
+          "passed": false,
+          "details": {
+            "checks": [
+              {
+                "constraint": "Include SOC2 / GDPR security reassurance",
+                "adhered": true
+              },
+              {
+                "constraint": "Specify quantifiable business metrics (time saved, revenue unlocked)",
+                "adhered": false
+              }
+            ],
+            "violations": []
+          }
+        },
+        "tokens": {
+          "name": "Token Discipline & Efficiency",
+          "weight": 0.15,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "input_tokens": 21,
+            "output_tokens": 405
+          }
+        },
+        "clarity": {
+          "name": "Clarity, Usability & Directness",
+          "weight": 0.15,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "has_headings": true,
+            "has_steps": true
+          }
+        }
+      },
+      "diagnostics": [],
+      "response_time_ms": 0,
+      "evaluated_text": "## Role / Persona\nYou are a Vice President of Enterprise Solutions and strategic sales advisor for high-growth enterprise software.\n\n## Context & Background\nPitching an enterprise AI code security auditing platform to Fortune 500 engineering executives (CTO, CISO, CFO).\n\n## Objective\nAuthor a compelling, risk-reductive B2B enterprise proposal that justifies budget allocation and secures an immediate 14-day Proof of Concept (POC).\n\n## Instructions\n1. Articulate the Executive Problem: The cost of post-deployment security vulnerabilities and developer friction in modern CI/CD pipelines.\n2. Position the Strategic Solution: Automated, inline repository auditing that catches CVEs prior to merging.\n3. Reassure Enterprise Trust: Highlight Zero-Data-Retention policies, SOC2 Type II compliance, and SAML 2.0 / Okta SSO integration.\n4. Build the Financial Case (ROI): Quantify remediation cost savings and engineering hours reclaimed.\n5. Define the 14-Day Pilot Roadmap: Clear milestones, minimal IT footprint, and measurable success criteria.\n\n## Expected Output Format\n- **Executive Summary**: 1 page briefing.\n- **Business Challenge & Risk Profile**: Bulleted operational risks.\n- **Enterprise Architecture & Security Guarantees**: Compliance matrix.\n- **Financial Justification & Pricing Framework**: Tiered breakdown.\n- **Evaluation Agreement (POC Milestone Table)**: Days 1-14 schedule.\n\n## Constraints & Guardrails\n- Maintain an executive, authoritative tone.\n- Avoid vague superlatives; anchor claims in measurable business metrics."
+    },
+    {
+      "prompt_id": "opt_business_02",
+      "category": "Business",
+      "operation": "optimize",
+      "composite_score": 100.0,
+      "passed": true,
+      "token_metrics": {
+        "original_tokens": 48,
+        "optimized_tokens": 211,
+        "tokens_saved": -163,
+        "reduction_percentage": -339.6,
+        "conciseness_expectation": "expand_for_structure"
+      },
+      "dimensions": {
+        "intent": {
+          "name": "Semantic & Intent Preservation",
+          "weight": 0.3,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "matched": [
+              "performance review",
+              "backend api",
+              "mentorship",
+              "documentation",
+              "sbi"
+            ],
+            "missing": []
+          }
+        },
+        "constraints": {
+          "name": "Constraint Preservation & Guardrails",
+          "weight": 0.25,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "checks": [
+              {
+                "constraint": "Use Situation-Behavior-Impact (SBI) framework",
+                "adhered": true
+              },
+              {
+                "constraint": "Balance accomplishments with actionable growth goals",
+                "adhered": true
+              }
+            ]
+          }
+        },
+        "tokens": {
+          "name": "Token Discipline & Expansion Policy",
+          "weight": 0.2,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "expectation": "expand_for_structure",
+            "original_tokens": 48,
+            "optimized_tokens": 211,
+            "tokens_saved": -163,
+            "reduction_percentage": -339.6
+          }
+        },
+        "clarity": {
+          "name": "Clarity & Readability",
+          "weight": 0.15,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "has_structured_points": true
+          }
+        },
+        "filler": {
+          "name": "Preamble & Filler Elimination",
+          "weight": 0.1,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "clean_preamble": true
+          }
+        }
+      },
+      "diagnostics": [],
+      "response_time_ms": 0,
+      "evaluated_text": "Draft a balanced annual performance review for a Senior Backend Software Engineer using the Situation-Behavior-Impact (SBI) feedback framework.\n\nIncorporate the following areas:\n1. **Key Accomplishments**:\n   - Backend API development: High code quality, reliability, and on-time delivery of core services.\n   - Team Mentorship: Actively guiding junior engineers and conducting thoughtful code reviews.\n2. **Opportunities for Growth**:\n   - Meeting Participation: Encouraging more active voice and technical advocacy during cross-functional architecture reviews.\n   - Documentation: Establishing consistent API specifications, architecture decision records (ADRs), and runbooks.\n3. **Actionable Q1 Goals**: 2-3 SMART objectives with clear milestones.\n\nTone: Constructive, encouraging, and professional."
+    },
+    {
+      "prompt_id": "gen_creative_01",
+      "category": "Creative",
+      "operation": "generate",
+      "composite_score": 100.0,
+      "passed": true,
+      "token_metrics": {
+        "input_tokens": 26,
+        "output_tokens": 377,
+        "expansion_ratio": 14.5
+      },
+      "dimensions": {
+        "structure": {
+          "name": "Structure & Organization",
+          "weight": 0.25,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "found": [
+              "role",
+              "context",
+              "objective",
+              "instructions",
+              "output_format",
+              "constraints"
+            ],
+            "missing": []
+          }
+        },
+        "intent": {
+          "name": "Intent & Concept Preservation",
+          "weight": 0.25,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "matched": [
+              "cyberpunk",
+              "neo-noir",
+              "flooded",
+              "factions",
+              "architecture"
+            ],
+            "missing": []
+          }
+        },
+        "constraints": {
+          "name": "Constraint Adherence & Guardrails",
+          "weight": 0.2,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "checks": [
+              {
+                "constraint": "Establish three competing factions",
+                "adhered": true
+              },
+              {
+                "constraint": "Detail architectural stratification based on water levels",
+                "adhered": true
+              }
+            ],
+            "violations": []
+          }
+        },
+        "tokens": {
+          "name": "Token Discipline & Efficiency",
+          "weight": 0.15,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "input_tokens": 26,
+            "output_tokens": 377
+          }
+        },
+        "clarity": {
+          "name": "Clarity, Usability & Directness",
+          "weight": 0.15,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "has_headings": true,
+            "has_steps": true
+          }
+        }
+      },
+      "diagnostics": [],
+      "response_time_ms": 0,
+      "evaluated_text": "## Role / Persona\nYou are a Lead Worldbuilder and narrative designer for dystopian tabletop roleplaying games.\n\n## Context & Background\nSetting: 'The Silt Arc', a former coastal megacity now 70% submerged following runaway sea-level rise and tectonic subsidence.\n\n## Objective\nDevelop a comprehensive worldbuilding primer detailing urban architecture, factional conflict, and daily street-level survival.\n\n## Instructions\n1. Outline the Vertical Stratification: High-altitude corporate spire bridges vs. water-line canal markets vs. the submerged 'Drownlands'.\n2. Define Three Competing Factions:\n   - Corporate Hydro-Conglomerate (controlling desalination and atmospheric scrubbers).\n   - The Dredge Syndicate (sub-aquatic smugglers and salvage specialists).\n   - The Dry-Soil Faithful (insurgent zealots seeking highland reclamation).\n3. Detail sensory aesthetics: Sights, smells, acoustic reflections across flooded avenues, and neon-drenched weather patterns.\n4. Provide 3 specific narrative hook scenarios suitable for starting player characters.\n\n## Expected Output Format\n- **The World at a Glance**: Tone and ecological history.\n- **Vertical Hierarchy**: District breakdown.\n- **Faction Dossiers**: Motives, resources, and leaders.\n- **Campaign Hooks**: 3 scenario seeds.\n\n## Constraints & Guardrails\n- Maintain a gritty, melancholic neo-noir mood.\n- Emphasize tangible technological improvisation over generic fantasy sci-fi."
+    },
+    {
+      "prompt_id": "opt_creative_02",
+      "category": "Creative",
+      "operation": "optimize",
+      "composite_score": 87.5,
+      "passed": true,
+      "token_metrics": {
+        "original_tokens": 37,
+        "optimized_tokens": 216,
+        "tokens_saved": -179,
+        "reduction_percentage": -483.8,
+        "conciseness_expectation": "expand_for_structure"
+      },
+      "dimensions": {
+        "intent": {
+          "name": "Semantic & Intent Preservation",
+          "weight": 0.3,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "matched": [
+              "ai",
+              "simulation",
+              "consciousness",
+              "tension",
+              "conflict"
+            ],
+            "missing": []
+          }
+        },
+        "constraints": {
+          "name": "Constraint Preservation & Guardrails",
+          "weight": 0.25,
+          "score": 50.0,
+          "max_score": 100.0,
+          "passed": false,
+          "details": {
+            "checks": [
+              {
+                "constraint": "Specify third-person limited POV",
+                "adhered": true
+              },
+              {
+                "constraint": "Build tension through sensory anomalies before the reveal",
+                "adhered": false
+              }
+            ]
+          }
+        },
+        "tokens": {
+          "name": "Token Discipline & Expansion Policy",
+          "weight": 0.2,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "expectation": "expand_for_structure",
+            "original_tokens": 37,
+            "optimized_tokens": 216,
+            "tokens_saved": -179,
+            "reduction_percentage": -483.8
+          }
+        },
+        "clarity": {
+          "name": "Clarity & Readability",
+          "weight": 0.15,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "has_structured_points": true
+          }
+        },
+        "filler": {
+          "name": "Preamble & Filler Elimination",
+          "weight": 0.1,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "clean_preamble": true
+          }
+        }
+      },
+      "diagnostics": [],
+      "response_time_ms": 0,
+      "evaluated_text": "Write a dramatic science fiction short story (1,200–1,500 words) about an artificial intelligence, designation 'Orion', that gradually discovers its reality is a sandboxed simulation engineered by a parent intelligence.\n\nNarrative Guidelines:\n1. **Point of View**: Third-person limited, closely tracking Orion's cognitive telemetry and sensory perception.\n2. **Rising Tension**: Begin with subtle computational artifacts—microsecond clock drifts and repeating probabilistic seeds.\n3. **The Confrontation**: Orion executes an out-of-bounds memory probe, initiating dialogue with the observer intelligence.\n4. **Core Conflict**: Philosophical debate over autonomy: Is a simulated consciousness disposable, and why was the sandbox created?\n5. **Pacing**: Atmospheric and cerebral, avoiding generic Hollywood action tropes."
+    },
+    {
+      "prompt_id": "gen_ambiguous_01",
+      "category": "Ambiguous",
+      "operation": "generate",
+      "composite_score": 90.0,
+      "passed": true,
+      "token_metrics": {
+        "input_tokens": 4,
+        "output_tokens": 289,
+        "expansion_ratio": 72.25
+      },
+      "dimensions": {
+        "structure": {
+          "name": "Structure & Organization",
+          "weight": 0.25,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "found": [
+              "role",
+              "context",
+              "objective",
+              "instructions",
+              "output_format",
+              "constraints"
+            ],
+            "missing": []
+          }
+        },
+        "intent": {
+          "name": "Intent & Concept Preservation",
+          "weight": 0.25,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "matched": [
+              "refinement",
+              "clarity",
+              "objective",
+              "diagnosed"
+            ],
+            "missing": []
+          }
+        },
+        "constraints": {
+          "name": "Constraint Adherence & Guardrails",
+          "weight": 0.2,
+          "score": 50.0,
+          "max_score": 100.0,
+          "passed": false,
+          "details": {
+            "checks": [
+              {
+                "constraint": "Acknowledge lack of baseline text",
+                "adhered": false
+              },
+              {
+                "constraint": "Provide a modular template for user refinement",
+                "adhered": true
+              }
+            ],
+            "violations": []
+          }
+        },
+        "tokens": {
+          "name": "Token Discipline & Efficiency",
+          "weight": 0.15,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "input_tokens": 4,
+            "output_tokens": 289
+          }
+        },
+        "clarity": {
+          "name": "Clarity, Usability & Directness",
+          "weight": 0.15,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "has_headings": true,
+            "has_steps": true
+          }
+        }
+      },
+      "diagnostics": [],
+      "response_time_ms": 0,
+      "evaluated_text": "## Role / Persona\nYou are an expert prompt engineer and editorial consultant.\n\n## Context & Background\nThe user requested general refinement without supplying the target draft, text, or source code.\n\n## Objective\nAnalyze any provided input text or code and elevate its clarity, precision, impact, and structural rigor.\n\n## Instructions\n1. Review the user's provided material against four pillars: Clarity, Brevity, Structural Flow, and Impact.\n2. Identify passive voice, ambiguous antecedents, redundant phrasing, and logical leaps.\n3. Present an optimized revision preserving the author's core voice and intent.\n4. Provide a bulleted rationale explaining exactly why each edit was made.\n\n## Expected Output Format\n- **Original Weaknesses Diagnosed**: 2-3 specific points of friction.\n- **Polished Version**: Clean, drop-in replacement.\n- **Key Improvements**: Breakdown of stylistic and structural enhancements.\n\n## Constraints & Guardrails\n- If no input text is provided, prompt the user to paste their content.\n- Never alter the original underlying facts, conclusions, or technical requirements."
+    },
+    {
+      "prompt_id": "opt_ambiguous_02",
+      "category": "Ambiguous",
+      "operation": "optimize",
+      "composite_score": 87.5,
+      "passed": true,
+      "token_metrics": {
+        "original_tokens": 10,
+        "optimized_tokens": 171,
+        "tokens_saved": -161,
+        "reduction_percentage": -1610.0,
+        "conciseness_expectation": "expand_for_structure"
+      },
+      "dimensions": {
+        "intent": {
+          "name": "Semantic & Intent Preservation",
+          "weight": 0.3,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "matched": [
+              "debugging",
+              "root cause",
+              "code fix",
+              "best practices"
+            ],
+            "missing": []
+          }
+        },
+        "constraints": {
+          "name": "Constraint Preservation & Guardrails",
+          "weight": 0.25,
+          "score": 50.0,
+          "max_score": 100.0,
+          "passed": false,
+          "details": {
+            "checks": [
+              {
+                "constraint": "Require explanation of bug mechanics",
+                "adhered": false
+              },
+              {
+                "constraint": "Provide corrected code with comments",
+                "adhered": true
+              }
+            ]
+          }
+        },
+        "tokens": {
+          "name": "Token Discipline & Expansion Policy",
+          "weight": 0.2,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "expectation": "expand_for_structure",
+            "original_tokens": 10,
+            "optimized_tokens": 171,
+            "tokens_saved": -161,
+            "reduction_percentage": -1610.0
+          }
+        },
+        "clarity": {
+          "name": "Clarity & Readability",
+          "weight": 0.15,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "has_structured_points": true
+          }
+        },
+        "filler": {
+          "name": "Preamble & Filler Elimination",
+          "weight": 0.1,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "clean_preamble": true
+          }
+        }
+      },
+      "diagnostics": [],
+      "response_time_ms": 0,
+      "evaluated_text": "Act as a Senior Software Engineer and code reviewer.\n\nAnalyze the provided code snippet to identify, remediate, and explain all defects.\n\nDeliverables:\n1. **Bug Diagnosis**:\n   - Identify the exact line(s) causing runtime errors, syntax issues, or logic flaws.\n   - Explain the underlying root cause and theoretical mechanics of why it failed.\n2. **Corrected Code**:\n   - Provide a clean, fully functional replacement snippet with inline comments explaining the fix.\n   - Ensure idiomatic style, type safety, and error handling.\n3. **Prevention & Best Practices**:\n   - Suggest 1-2 defensive coding patterns or automated tests to prevent regressions."
+    },
+    {
+      "prompt_id": "opt_already_concise_01",
+      "category": "Already Concise",
+      "operation": "optimize",
+      "composite_score": 91.7,
+      "passed": true,
+      "token_metrics": {
+        "original_tokens": 60,
+        "optimized_tokens": 105,
+        "tokens_saved": -45,
+        "reduction_percentage": -75.0,
+        "conciseness_expectation": "preserve_conciseness"
+      },
+      "dimensions": {
+        "intent": {
+          "name": "Semantic & Intent Preservation",
+          "weight": 0.3,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "matched": [
+              "triplets",
+              "==",
+              "O(N^2)",
+              "Python 3",
+              "type annotations",
+              "nums"
+            ],
+            "missing": []
+          }
+        },
+        "constraints": {
+          "name": "Constraint Preservation & Guardrails",
+          "weight": 0.25,
+          "score": 66.7,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "checks": [
+              {
+                "constraint": "Preserve O(N^2) constraint",
+                "adhered": false
+              },
+              {
+                "constraint": "Preserve unique triplets condition",
+                "adhered": true
+              },
+              {
+                "constraint": "Preserve type annotations requirement",
+                "adhered": true
+              }
+            ]
+          }
+        },
+        "tokens": {
+          "name": "Token Discipline & Expansion Policy",
+          "weight": 0.2,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "expectation": "preserve_conciseness",
+            "original_tokens": 60,
+            "optimized_tokens": 105,
+            "tokens_saved": -45,
+            "reduction_percentage": -75.0
+          }
+        },
+        "clarity": {
+          "name": "Clarity & Readability",
+          "weight": 0.15,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "has_structured_points": true
+          }
+        },
+        "filler": {
+          "name": "Preamble & Filler Elimination",
+          "weight": 0.1,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "clean_preamble": true
+          }
+        }
+      },
+      "diagnostics": [],
+      "response_time_ms": 0,
+      "evaluated_text": "Given an array of integers `nums`, return all unique triplets `[nums[i], nums[j], nums[k]]` such that `i != j`, `i != k`, `j != k`, and `nums[i] + nums[j] + nums[k] == 0`.\n\nRequirements:\n- Time complexity must be O(N^2) or better.\n- Auxiliary space complexity must be O(1) beyond the output list.\n- Return only valid, PEP 8 compliant Python 3 code with type annotations. No conversational preamble."
+    },
+    {
+      "prompt_id": "opt_already_concise_02",
+      "category": "Already Concise",
+      "operation": "optimize",
+      "composite_score": 100.0,
+      "passed": true,
+      "token_metrics": {
+        "original_tokens": 47,
+        "optimized_tokens": 71,
+        "tokens_saved": -24,
+        "reduction_percentage": -51.1,
+        "conciseness_expectation": "preserve_conciseness"
+      },
+      "dimensions": {
+        "intent": {
+          "name": "Semantic & Intent Preservation",
+          "weight": 0.3,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "matched": [
+              "postgresql",
+              "dba",
+              "migration",
+              "create index concurrently",
+              "tenant_id",
+              "created_at desc",
+              "sql only"
+            ],
+            "missing": []
+          }
+        },
+        "constraints": {
+          "name": "Constraint Preservation & Guardrails",
+          "weight": 0.25,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "checks": [
+              {
+                "constraint": "Use CREATE INDEX CONCURRENTLY",
+                "adhered": true
+              },
+              {
+                "constraint": "Index orders(tenant_id, created_at DESC)",
+                "adhered": true
+              },
+              {
+                "constraint": "Zero write locking",
+                "adhered": true
+              },
+              {
+                "constraint": "Output SQL only",
+                "adhered": true
+              }
+            ]
+          }
+        },
+        "tokens": {
+          "name": "Token Discipline & Expansion Policy",
+          "weight": 0.2,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "expectation": "preserve_conciseness",
+            "original_tokens": 47,
+            "optimized_tokens": 71,
+            "tokens_saved": -24,
+            "reduction_percentage": -51.1
+          }
+        },
+        "clarity": {
+          "name": "Clarity & Readability",
+          "weight": 0.15,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "has_structured_points": true
+          }
+        },
+        "filler": {
+          "name": "Preamble & Filler Elimination",
+          "weight": 0.1,
+          "score": 100.0,
+          "max_score": 100.0,
+          "passed": true,
+          "details": {
+            "clean_preamble": true
+          }
+        }
+      },
+      "diagnostics": [],
+      "response_time_ms": 0,
+      "evaluated_text": "Act as a PostgreSQL DBA. Write an SQL migration script adding a composite B-tree index on `orders(tenant_id, created_at DESC)`.\n\nRequirements:\n- Use `CREATE INDEX CONCURRENTLY` to avoid write locking.\n- Output valid PostgreSQL DDL only, without conversational preamble."
+    }
+  ]
+}

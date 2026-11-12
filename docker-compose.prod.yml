@@ -1,0 +1,97 @@
+# ==============================================================================
+# AutoPrompt Production Docker Compose Specification (Phase 8.3)
+# Hardened Nginx Reverse Proxy + FastAPI Backend + Certbot SSL Automation
+# ==============================================================================
+
+services:
+  # ── 1. Nginx Edge Reverse Proxy & Static Web Server ────────────────────────
+  nginx:
+    image: nginx:alpine-slim
+    container_name: autoprompt-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d/autoprompt-production.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./autoprompt-prototype:/var/www/html:ro
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/www/certbot
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - autoprompt-net
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  # ── 2. FastAPI Application Backend ─────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: autoprompt-backend:1.0.0
+    container_name: autoprompt-backend
+    restart: unless-stopped
+    # NOTICE: No ports are published to host! Backend is only reachable via Nginx
+    expose:
+      - "8000"
+    volumes:
+      - autoprompt-data:/app/data
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-3-flash-preview}
+      - GEMINI_TEMPERATURE=${GEMINI_TEMPERATURE:-0.7}
+      - GEMINI_TIMEOUT_SECONDS=${GEMINI_TIMEOUT_SECONDS:-30.0}
+      - GEMINI_MAX_RETRIES=${GEMINI_MAX_RETRIES:-2}
+      - HOST=0.0.0.0
+      - PORT=8000
+      - DEBUG=false
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - DATABASE_URL=sqlite:////app/data/autoprompt.db
+    env_file:
+      - path: ./.env
+        required: false
+      - path: ./backend/.env
+        required: false
+    networks:
+      - autoprompt-net
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request, sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health').getcode() == 200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # ── 3. Certbot Automated Certificate Renewal ───────────────────────────────
+  certbot:
+    image: certbot/certbot:latest
+    container_name: autoprompt-certbot
+    restart: unless-stopped
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/www/certbot
+    # Automated certificate renewal check every 12 hours
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    networks:
+      - autoprompt-net
+
+# ── Isolated Internal Network ────────────────────────────────────────────────
+networks:
+  autoprompt-net:
+    name: autoprompt-net
+    driver: bridge
+
+# ── Persistent Storage Volumes ───────────────────────────────────────────────
+volumes:
+  autoprompt-data:
+    name: autoprompt-sqlite-data
+  certbot-etc:
+    name: autoprompt-certbot-etc
+  certbot-var:
+    name: autoprompt-certbot-var

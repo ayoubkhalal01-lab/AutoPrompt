@@ -1,0 +1,6 @@
+# Ignore docs and scratch
+docs/
+scratch/
+.vscode/
+.DS_Store
+Thumbs.db
