@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
+  "_note": "This file intentionally marks backend/ as NOT a standalone Vercel project.",
+  "_note2": "backend/ is a source library imported by api/index.py at runtime. It is NOT deployed independently.",
+  "buildCommand": null,
+  "outputDirectory": null,
+  "installCommand": null,
+  "framework": null,
+  "ignoreCommand": "exit 0"
+}
