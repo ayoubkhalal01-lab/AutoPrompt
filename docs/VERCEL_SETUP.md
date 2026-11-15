@@ -5,37 +5,23 @@
 
 ---
 
-## ⚠️ Monorepo Import — Critical Import Instructions
+## Single-Project Vercel Import
 
-When you import `https://github.com/ayoubkhalal01-lab/AutoPrompt` into Vercel, the
-importer detects **three applications** in the repository:
-
-| Detected | Cause |
-|----------|-------|
-| `Root: AutoPrompt` | `vercel.json` + root `requirements.txt` |
-| `backend/: FastAPI` | `backend/requirements.txt` contains `fastapi` |
-| `api/: FastAPI` | `api/index.py` exports a FastAPI `app` |
-
-**You must select `Root: AutoPrompt` with Root Directory `./`.**  
-Never select `backend/` or `api/` as the root — those are sub-components, not
-standalone deployable applications.
+AutoPrompt deploys as a **single unified project** at the repository root (`./`).
+All API routes (`/api/*`, `/health`) and frontend static assets (`/`) are orchestrated
+through the root `vercel.json`. Subdirectories (`backend/`, `autoprompt-prototype/`, `api/`)
+do not expose independent deployment manifests or conflicting `requirements.txt` files,
+ensuring Vercel imports the repository cleanly without prompting for monorepo project selection.
 
 ### Step-by-step Vercel Import
 
 1. Go to [vercel.com/new](https://vercel.com/new) → **Import Git Repository**
 2. Find `ayoubkhalal01-lab/AutoPrompt` and click **Import**
-3. When prompted to select a project, choose **Root: AutoPrompt**
-4. Under **Root Directory**, confirm it shows `./` (the repo root)
-5. Under **Framework Preset**, leave it as **Other** (not FastAPI)
-6. Leave **Build Command** and **Output Directory** blank (controlled by `vercel.json`)
-7. Click **Deploy** (add environment variables first — see Step 3 below)
-
-> **Why does Vercel detect 3 projects?**  
-> Vercel scans up to depth-2 subdirectories for framework markers (a `requirements.txt`
-> containing `fastapi`, or a Python file exporting `app = FastAPI()`). This is cosmetic —
-> selecting `Root` is the documented Vercel workflow for single-project repositories that
-> contain framework code in subdirectories. The root `vercel.json` already correctly
-> routes all traffic through one unified deployment.
+3. Under **Root Directory**, confirm it shows `./` (the repository root)
+4. Under **Framework Preset**, leave it as **Other** (controlled by `vercel.json`)
+5. Leave **Build Command** and **Output Directory** blank (controlled by `vercel.json`)
+6. Add environment variables (**before** clicking Deploy — see Step 3 below)
+7. Click **Deploy**
 
 ---
 

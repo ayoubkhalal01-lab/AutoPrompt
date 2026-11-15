@@ -1027,13 +1027,13 @@ class TestVercelPackagingValidation(unittest.TestCase):
         self.assertIn("google-genai", content.lower())
 
     def test_backend_requirements_also_has_psycopg2(self):
-        """backend/requirements.txt must also include psycopg2-binary (Phase 8.5-B)."""
-        content = (BACKEND_DIR / "requirements.txt").read_text(encoding="utf-8")
+        """backend/requirements.docker.txt must also include psycopg2-binary (Phase 8.5-B)."""
+        content = (BACKEND_DIR / "requirements.docker.txt").read_text(encoding="utf-8")
         self.assertIn("psycopg2-binary", content.lower())
 
     def test_root_and_backend_requirements_consistent(self):
         """
-        Core packages declared in backend/requirements.txt must all appear
+        Core packages declared in backend/requirements.docker.txt must all appear
         in root requirements.txt (Vercel must have everything Docker has).
         """
         def parse_packages(text):
@@ -1047,7 +1047,7 @@ class TestVercelPackagingValidation(unittest.TestCase):
             return pkgs
 
         backend_pkgs = parse_packages(
-            (BACKEND_DIR / "requirements.txt").read_text(encoding="utf-8")
+            (BACKEND_DIR / "requirements.docker.txt").read_text(encoding="utf-8")
         )
         root_pkgs = parse_packages(
             (REPO_ROOT / "requirements.txt").read_text(encoding="utf-8")
@@ -1056,7 +1056,7 @@ class TestVercelPackagingValidation(unittest.TestCase):
         missing = backend_pkgs - root_pkgs
         self.assertEqual(
             missing, set(),
-            f"Packages in backend/requirements.txt missing from root: {missing}"
+            f"Packages in backend/requirements.docker.txt missing from root: {missing}"
         )
 
     # -- docs/VERCEL_SETUP.md -------------------------------------------------

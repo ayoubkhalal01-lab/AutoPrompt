@@ -47,6 +47,8 @@ Powered by **Google Gemini 3 Flash Preview** (`gemini-3-flash-preview`), AutoPro
 
 ```
 prompauto/
+├── api/                          # Vercel Serverless Function entrypoint
+│   └── index.py                  # ASGI handler exporting FastAPI app
 ├── autoprompt-prototype/         # Frontend Web Application (SPA)
 │   ├── index.html                # Main application interface
 │   ├── css/
@@ -58,27 +60,39 @@ prompauto/
 │   │   ├── workspace.js          # Workspace state & API integration
 │   │   └── persistence.js        # Saved Prompts & History modal UI
 │   └── docs/                     # Frontend architectural documentation
-├── backend/                      # Production Backend Service
+├── backend/                      # Core FastAPI Application & Modules
 │   ├── app/
 │   │   ├── config.py             # Typed settings loaded from .env
 │   │   ├── main.py               # FastAPI application, routes, and middleware
 │   │   ├── db/
 │   │   │   ├── models.py         # SQLAlchemy ORM models (SavedPrompt, PromptHistory)
-│   │   │   └── session.py        # SQLite engine, WAL mode, session factory
+│   │   │   └── session.py        # Dual-engine DB (PostgreSQL + SQLite WAL)
 │   │   ├── schemas/
 │   │   │   ├── persistence_schemas.py # Pydantic models for storage
 │   │   │   └── prompt_schemas.py      # Pydantic models for AI endpoints
 │   │   └── services/
 │   │       ├── gemini_service.py # Google GenAI SDK integration & retry engine
 │   │       └── persistence_service.py # Parameterized queries & search logic
-│   ├── reports/                  # Phase 5.x, 6.x, and 7.x audit & benchmark reports
-│   ├── tests/                    # 129 automated unit & integration tests
+│   ├── Dockerfile                # Multi-stage production container build
+│   ├── reports/                  # Phase 5.x–8.x forensic audit & benchmark reports
+│   ├── tests/                    # 133 automated unit, integration & prevention tests
 │   ├── autoprompt.db             # Local SQLite database (WAL enabled)
-│   ├── requirements.txt          # Python dependency specifications
+│   ├── requirements.docker.txt   # Container-specific dependencies
 │   └── .env.example              # Environment variables template
-├── docs/
-│   └── TECHNICAL_ARCHITECTURE.md # Deep technical architecture manual
+├── docs/                         # Production architecture & deployment manuals
+│   ├── DEPLOYMENT_COST_COMPARISON.md
+│   ├── DOCKER_SETUP.md
+│   ├── NGINX_AND_SSL_SETUP.md
+│   ├── PRODUCTION_ARCHITECTURE.md
+│   ├── PRODUCTION_DEPLOYMENT_ROADMAP.md
+│   ├── PRODUCTION_ENVIRONMENT_AND_SECRETS.md
+│   ├── TECHNICAL_ARCHITECTURE.md
+│   ├── VERCEL_MIGRATION_AUDIT.md
+│   └── VERCEL_SETUP.md           # Single-project Vercel deployment guide
+├── nginx/                        # Nginx reverse proxy configuration & TLS hardening
 ├── scratch/                      # Automated QA, security, and benchmark suites
+├── requirements.txt              # Canonical root dependencies (Vercel & local development)
+├── vercel.json                   # Vercel routing, rewrites, and function configuration
 └── README.md                     # This documentation
 ```
 
@@ -94,22 +108,22 @@ prompauto/
 ### 2. Backend Setup
 
 ```bash
-# Navigate to backend directory
-cd backend
-
+# Navigate to repository root (recommended)
 # Create virtual environment
-python -m venv venv
+python -m venv backend/venv
 
 # Activate virtual environment
 # Windows:
-.\venv\Scripts\activate
+.\backend\venv\Scripts\activate
 # Linux/macOS:
-source venv/bin/activate
+source backend/venv/bin/activate
 
-# Install dependencies
+# Install root dependencies (covers both local development and Vercel serverless)
 pip install -r requirements.txt
 
-# Configure environment
+# Or if developing inside backend/:
+cd backend
+pip install -r requirements.docker.txt
 cp .env.example .env
 # Edit .env and insert your GEMINI_API_KEY
 ```
@@ -184,12 +198,16 @@ AutoPrompt has undergone an extensive multi-phase QA audit:
 | **Phase 7.3** | Security & Vulnerability Audit | **0 Vulns / Hardened** | [`PHASE_7_3_SECURITY_AUDIT_REPORT.md`](backend/reports/PHASE_7_3_SECURITY_AUDIT_REPORT.md) |
 | **Phase 7.4** | Performance & Optimization | **> 6,700 RPS Peak** | [`PHASE_7_4_PERFORMANCE_REPORT.md`](backend/reports/PHASE_7_4_PERFORMANCE_REPORT.md) |
 | **Phase 7.5** | Documentation & Release Handover | **Complete** | [`PHASE_7_5_RELEASE_HANDOVER_REPORT.md`](backend/reports/PHASE_7_5_RELEASE_HANDOVER_REPORT.md) |
+| **Phase 8.5** | Vercel Serverless & Single-Project Resolution | **277/277 Passed (100%)** | [`PHASE_8_5F_VERCEL_MONOREPO_ROOT_CAUSE_RESOLUTION.md`](backend/reports/PHASE_8_5F_VERCEL_MONOREPO_ROOT_CAUSE_RESOLUTION.md) |
 
 ### Running the Test Suites
 
 ```bash
-# Run full backend test suite (129 tests)
-python -m pytest backend/tests -q
+# Run full regression suite across all backend modules & Vercel verification (223 pytest items)
+python -m pytest backend/tests scratch/test_phase_8_5d.py scratch/test_phase_8_5e_acceptance.py -q
+
+# Run automated Vercel single-project discovery simulation
+python scratch/audit_vercel_detection.py
 
 # Run functional regression suite (44 tests)
 python scratch/test_final_functional_qa.py

@@ -20,8 +20,8 @@ ENV PATH="/opt/venv/bin:$PATH"
 # Upgrade pip to latest secure version
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 
-# Install dependencies from requirements.txt
-COPY requirements.txt .
+# Install dependencies from requirements.docker.txt
+COPY requirements.docker.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 
