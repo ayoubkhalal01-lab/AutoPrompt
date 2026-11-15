@@ -34,10 +34,37 @@
   const STATE_SUCCESS = 'success';
   const STATE_ERROR = 'error';
 
-  // FastAPI Backend URL (configurable via window.AUTOPROMPT_API_URL, e.g. '' for same-origin proxy)
-  const API_BASE_URL = (typeof window !== 'undefined' && typeof window.AUTOPROMPT_API_URL === 'string')
-    ? window.AUTOPROMPT_API_URL
-    : 'http://127.0.0.1:8000';
+  /**
+   * Resolves the backend API base URL dynamically:
+   * - window.AUTOPROMPT_API_URL if explicitly defined (takes precedence)
+   * - '' (same-origin relative paths) when deployed on HTTPS (Vercel, custom domain)
+   *   or non-localhost hosts, or when port is 8000 / 3000 (FastAPI or Vercel CLI)
+   * - 'http://127.0.0.1:8000' only during local standalone development (e.g. port 5500 or file://)
+   */
+  function resolveApiBaseUrl() {
+    if (typeof window !== 'undefined' && typeof window.AUTOPROMPT_API_URL === 'string') {
+      return window.AUTOPROMPT_API_URL;
+    }
+    if (typeof window !== 'undefined' && window.location) {
+      var protocol = window.location.protocol;
+      var hostname = window.location.hostname;
+      var port = window.location.port;
+
+      if (protocol === 'https:') {
+        return '';
+      }
+      if (hostname && hostname !== 'localhost' && hostname !== '127.0.0.1') {
+        return '';
+      }
+      if (port === '8000' || port === '3000') {
+        return '';
+      }
+      return 'http://127.0.0.1:8000';
+    }
+    return '';
+  }
+
+  const API_BASE_URL = resolveApiBaseUrl();
 
   // Token count debounce delay in milliseconds
   const TOKEN_COUNT_DEBOUNCE_MS = 600;
@@ -1116,9 +1143,14 @@
             ? 'La requête a expiré. Le serveur met trop de temps à répondre. Veuillez réessayer.'
             : 'Request timed out. The server is taking too long to respond. Please try again.';
         } else if (err.message && err.message.toLowerCase().includes('failed to fetch')) {
-          errorMsg = self.currentLang === 'fr'
-            ? 'Impossible de se connecter au serveur backend. Vérifiez que le serveur FastAPI est en cours d\'exécution sur le port 8000.'
-            : 'Unable to connect to the backend server. Please ensure the FastAPI server is running on http://127.0.0.1:8000.';
+          var isLocal = API_BASE_URL.indexOf('127.0.0.1') !== -1 || API_BASE_URL.indexOf('localhost') !== -1;
+          errorMsg = isLocal
+            ? (self.currentLang === 'fr'
+                ? 'Impossible de se connecter au serveur backend. Vérifiez que le serveur FastAPI est en cours d\'exécution sur le port 8000.'
+                : 'Unable to connect to the backend server. Please ensure the FastAPI server is running on http://127.0.0.1:8000.')
+            : (self.currentLang === 'fr'
+                ? 'Impossible de se connecter au service API backend. Veuillez vérifier votre connexion ou l\'état du service.'
+                : 'Unable to connect to the backend API service. Please verify your connection or service status.');
         } else {
           errorMsg = self.currentLang === 'fr'
             ? 'Une erreur réseau s\'est produite. Veuillez vérifier votre connexion et réessayer.'

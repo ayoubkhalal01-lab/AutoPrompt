@@ -11,11 +11,37 @@
 (function (global) {
   'use strict';
 
-  // ─── Constants ───────────────────────────────────────────────────────────────
-  // Configurable via window.AUTOPROMPT_API_URL (e.g. '' for same-origin proxy)
-  const API_BASE_URL = (typeof window !== 'undefined' && typeof window.AUTOPROMPT_API_URL === 'string')
-    ? window.AUTOPROMPT_API_URL
-    : 'http://127.0.0.1:8000';
+  /**
+   * Resolves the backend API base URL dynamically:
+   * - window.AUTOPROMPT_API_URL if explicitly defined (takes precedence)
+   * - '' (same-origin relative paths) when deployed on HTTPS (Vercel, custom domain)
+   *   or non-localhost hosts, or when port is 8000 / 3000 (FastAPI or Vercel CLI)
+   * - 'http://127.0.0.1:8000' only during local standalone development (e.g. port 5500 or file://)
+   */
+  function resolveApiBaseUrl() {
+    if (typeof window !== 'undefined' && typeof window.AUTOPROMPT_API_URL === 'string') {
+      return window.AUTOPROMPT_API_URL;
+    }
+    if (typeof window !== 'undefined' && window.location) {
+      var protocol = window.location.protocol;
+      var hostname = window.location.hostname;
+      var port = window.location.port;
+
+      if (protocol === 'https:') {
+        return '';
+      }
+      if (hostname && hostname !== 'localhost' && hostname !== '127.0.0.1') {
+        return '';
+      }
+      if (port === '8000' || port === '3000') {
+        return '';
+      }
+      return 'http://127.0.0.1:8000';
+    }
+    return '';
+  }
+
+  const API_BASE_URL = resolveApiBaseUrl();
   const TOAST_DURATION_MS = 3500;
   const SEARCH_DEBOUNCE_MS = 400;
   const CONTENT_SNIPPET_LENGTH = 220;
