@@ -44,10 +44,12 @@ class Settings:
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO").upper()
 
     # ── Database Settings (SQLite) ────────────────────────────────────────────
-    DATABASE_URL: str = os.getenv(
-        "DATABASE_URL",
-        f"sqlite:///{(_CURRENT_DIR.parent / 'autoprompt.db').as_posix()}"
+    _default_db: str = (
+        "sqlite:////tmp/autoprompt.db"
+        if os.getenv("VERCEL") == "1"
+        else f"sqlite:///{(_CURRENT_DIR.parent / 'autoprompt.db').as_posix()}"
     )
+    DATABASE_URL: str = os.getenv("DATABASE_URL", _default_db)
 
     # ── App Metadata ──────────────────────────────────────────────────────────
     APP_NAME: str = "AutoPrompt Backend"
