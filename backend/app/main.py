@@ -240,6 +240,7 @@ def api_optimize_prompt(
         original_prompt=payload.original_prompt,
         mode=payload.mode,
         optimization_instructions=payload.optimization_instructions,
+        strategy=payload.strategy,
     )
 
     # Automatically record in history on success

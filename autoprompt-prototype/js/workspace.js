@@ -939,6 +939,18 @@
             }
           }
         }
+
+        // Optimization Explanation Banner (e.g. why tokens expanded under Quality strategy)
+        var noteBanner = document.getElementById('optimization-note-banner');
+        var noteText = document.getElementById('optimization-note-text');
+        if (noteBanner && noteText) {
+          if (metrics && metrics.preservation_note) {
+            noteText.textContent = metrics.preservation_note;
+            noteBanner.style.display = 'block';
+          } else {
+            noteBanner.style.display = 'none';
+          }
+        }
       }
     },
 
@@ -1034,9 +1046,13 @@
 
       // Build payload matching backend OptimizeRequest schema
       var optMode = this.activeModeOptimize || MODE_QUICK;
+      // Read strategy dropdown (defaults to 'quality' if element absent)
+      var strategyEl = document.getElementById('optimize-strategy');
+      var optStrategy = strategyEl ? strategyEl.value : 'quality';
       var payload = {
         original_prompt: rawText,
-        mode: optMode
+        mode: optMode,
+        strategy: optStrategy
       };
 
       // Include custom optimization instructions when in advanced mode
@@ -1115,7 +1131,8 @@
               original_tokens: data.original_tokens || 0,
               optimized_tokens: data.optimized_tokens || 0,
               tokens_saved: data.tokens_saved || 0,
-              reduction_percentage: data.reduction_percentage || 0
+              reduction_percentage: data.reduction_percentage || 0,
+              preservation_note: data.preservation_note || null
             };
           }
 

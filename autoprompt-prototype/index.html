@@ -318,6 +318,11 @@
                       <span class="metric-subtext" id="subtext-metric-4">Efficiency gain</span>
                     </div>
                   </div>
+
+                  <!-- Optimization Strategy / Quality Explanation Note -->
+                  <div id="optimization-note-banner" class="optimization-note-banner" style="display:none;margin-top:1rem;padding:0.75rem 1rem;background:rgba(234,179,8,0.1);border-left:4px solid #eab308;border-radius:4px;font-size:0.875rem;color:var(--text-secondary,#94a3b8);line-height:1.5;">
+                    <span id="optimization-note-text"></span>
+                  </div>
                 </div>
 
                 <!-- C. Primary Output Card: Optimized / Generated Prompt -->
@@ -809,6 +814,15 @@
 
                   <!-- Optimize Actions Bar -->
                   <div class="generate-actions-bar">
+                    <!-- Strategy selector -->
+                    <div class="strategy-selector-wrap" style="display:flex;align-items:center;gap:0.5rem;margin-right:auto;">
+                      <label for="optimize-strategy" style="font-size:0.85rem;font-weight:600;white-space:nowrap;">Strategy:</label>
+                      <select id="optimize-strategy" class="input-control" style="padding:0.35rem 0.6rem;font-size:0.85rem;width:auto;">
+                        <option value="quality" selected>Quality (clarity & structure)</option>
+                        <option value="token">Token (minimize token usage)</option>
+                      </select>
+                    </div>
+
                     <button id="btn-optimize-prompt" class="btn btn-primary-gradient btn-generate" type="button">
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>

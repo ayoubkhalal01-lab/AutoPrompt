@@ -12,6 +12,7 @@ Phase 5.4 Architecture:
 from __future__ import annotations
 
 import logging
+import re
 import time
 from typing import Any
 
@@ -72,6 +73,98 @@ Core Guidelines:
 4. Enhance Structure Appropriately: When a prompt is genuinely vague or underspecified, add necessary structure (concrete deliverables, constraints, or steps)—but remain token-economical.
 5. Do NOT Invent Unavailable Data: Do not assume specific dataset schemas, proprietary column names, or mock data not provided in the prompt.
 6. Direct Output: Output only the optimized prompt. Never include conversational preamble (such as 'Here is the optimized prompt:') or closing remarks."""
+
+# System instruction used for the QUALITY strategy (may add structure)
+QUALITY_SYSTEM_INSTRUCTION = OPTIMIZE_SYSTEM_INSTRUCTION
+
+# System instruction used for the TOKEN strategy (explicitly discourages expansion)
+TOKEN_SYSTEM_INSTRUCTION = """You are AutoPrompt's Token-Reduction Engine.
+Your task is to rewrite an existing prompt using the minimum number of tokens while strictly preserving all essential requirements, technical constraints, and the original intent.
+
+Rules:
+1. Remove every markdown heading (## Role, ## Context, etc.) unless the heading text conveys unique meaning not already expressed in the content below it.
+2. Delete filler phrases: "Please", "Make sure to", "It is important that", "You should", "Ensure that".
+3. Merge bullet-point lists into comma-separated inline text wherever the meaning is unchanged.
+4. Remove redundant restatements of the same constraint or instruction.
+5. PRESERVE every technical constraint verbatim (lines containing: must, must not, should not, do not, limit, maximum, minimum, required, constraint, latency, threshold).
+6. Direct Output: Output only the reduced prompt. No preamble, no explanation."""
+
+
+# ── Token-Optimization Helper (rule-based, no LLM) ───────────────────────────
+# Keyword patterns that identify mandatory-constraint lines (must NOT be deleted)
+_CONSTRAINT_PATTERN = re.compile(
+    r"\b(must|must not|should not|do not|don\'t|limit|maximum|minimum|required|"
+    r"constraint|latency|threshold|never|no more than|at most|at least)\b",
+    re.IGNORECASE,
+)
+# Markdown headings: "# …", "## …", "**Label:**", "- **Label:**"
+_HEADING_PATTERN = re.compile(r"^(#{1,6}\s+.+|[-*]\s+\*\*.+\*\*:?\s*)$")
+# Filler phrases to strip (case-insensitive)
+_FILLERS = re.compile(
+    r"\b(please|make sure to|it is important that|ensure that|you should|"
+    r"be sure to|keep in mind that|note that)\b[,.]?\s*",
+    re.IGNORECASE,
+)
+
+
+def _token_optimize(text: str) -> str:
+    """
+    Rule-based token minimiser.
+    Removes headings and filler words; merges short bullet lists into inline text;
+    collapses blank lines; always preserves constraint sentences verbatim.
+    """
+    lines = text.splitlines()
+    result_lines: list[str] = []
+    pending_bullets: list[str] = []
+
+    def flush_bullets() -> None:
+        if pending_bullets:
+            result_lines.append(", ".join(pending_bullets) + ".")
+            pending_bullets.clear()
+
+    for raw in lines:
+        line = raw.strip()
+
+        # Always keep constraint lines exactly as-is
+        if _CONSTRAINT_PATTERN.search(line):
+            flush_bullets()
+            result_lines.append(line)
+            continue
+
+        # Drop pure markdown headings (they add tokens without content)
+        if _HEADING_PATTERN.match(line):
+            continue
+
+        # Collect bullet-list items for merging
+        if line.startswith(("- ", "* ", "• ")):
+            item = _FILLERS.sub("", line[2:]).strip()
+            if item:
+                pending_bullets.append(item)
+            continue
+
+        # Flush collected bullets before a non-bullet line
+        flush_bullets()
+
+        if not line:
+            # Preserve at most one blank line between paragraphs
+            if result_lines and result_lines[-1] != "":
+                result_lines.append("")
+            continue
+
+        # Strip filler phrases from regular sentences
+        cleaned = _FILLERS.sub("", line).strip()
+        if cleaned:
+            result_lines.append(cleaned)
+
+    flush_bullets()
+
+    # Strip leading/trailing blank lines
+    while result_lines and result_lines[0] == "":
+        result_lines.pop(0)
+    while result_lines and result_lines[-1] == "":
+        result_lines.pop()
+
+    return "\n".join(result_lines)
 
 
 # ── Error Classifier ──────────────────────────────────────────────────────────
@@ -330,10 +423,20 @@ def optimize_prompt(
     mode: str = "quick",
     optimization_instructions: str | None = None,
     temperature: float | None = None,
+    strategy: str = "quality",
 ) -> dict[str, Any]:
     """
-    Optimize an existing user prompt for clarity, intent preservation, and token efficiency.
-    Returns a normalized dictionary adhering to the OptimizeResponse schema.
+    Optimize an existing user prompt.
+
+    strategy "quality" (default):
+        Passes the prompt through the Gemini LLM for structural / clarity improvement.
+        May increase token count; a preservation_note will explain if it does.
+
+    strategy "token":
+        First runs a lightweight rule-based token reducer (_token_optimize).
+        Then, if the user also provided optimization_instructions, additionally
+        runs a strict LLM pass with TOKEN_SYSTEM_INSTRUCTION to honour custom directives.
+        Guarantees: constraint lines are always preserved verbatim.
     """
     if not settings.has_gemini_key:
         return {
@@ -348,32 +451,62 @@ def optimize_prompt(
             "response_time_ms": 0,
             "error_code": "api_key_not_found",
             "error_message": SAFE_ERROR_HINTS["api_key_not_found"],
+            "preservation_note": None,
         }
 
     original_tokens = count_tokens(original_prompt)
 
-    if optimization_instructions:
-        user_content = (
-            f"Prompt to optimize:\n{original_prompt}\n\n"
-            f"Specific Focus Directives:\n{optimization_instructions}"
-        )
-    else:
-        user_content = original_prompt
+    if strategy == "token":
+        # ── Token strategy: rule-based reduction ──────────────────────────────
+        optimized_text = _token_optimize(original_prompt)
 
-    success, optimized_text, elapsed_ms, error_code, error_message = _execute_ai_request(
-        operation="optimize",
-        system_instruction=OPTIMIZE_SYSTEM_INSTRUCTION,
-        user_content=user_content,
-        temperature=temperature,
-    )
+        # If custom instructions were provided, honour them with a focused LLM pass
+        if optimization_instructions:
+            user_content = (
+                f"Prompt to further minimise:\n{optimized_text}\n\n"
+                f"Additional directives:\n{optimization_instructions}"
+            )
+            success, optimized_text, elapsed_ms, error_code, error_message = _execute_ai_request(
+                operation="optimize",
+                system_instruction=TOKEN_SYSTEM_INSTRUCTION,
+                user_content=user_content,
+                temperature=temperature,
+            )
+        else:
+            success, elapsed_ms, error_code, error_message = True, 0, None, None
+
+    else:
+        # ── Quality strategy: full LLM pass (existing behaviour) ─────────────
+        if optimization_instructions:
+            user_content = (
+                f"Prompt to optimize:\n{original_prompt}\n\n"
+                f"Specific Focus Directives:\n{optimization_instructions}"
+            )
+        else:
+            user_content = original_prompt
+
+        success, optimized_text, elapsed_ms, error_code, error_message = _execute_ai_request(
+            operation="optimize",
+            system_instruction=QUALITY_SYSTEM_INSTRUCTION,
+            user_content=user_content,
+            temperature=temperature,
+        )
 
     optimized_tokens = count_tokens(optimized_text) if (success and optimized_text) else 0
-
     tokens_saved = (original_tokens - optimized_tokens) if success else 0
     reduction_percentage = (
         round((tokens_saved / original_tokens) * 100, 1)
         if (success and original_tokens > 0) else 0.0
     )
+
+    # Explain token expansion only for quality strategy
+    preservation_note: str | None = None
+    if success and strategy == "quality" and optimized_tokens > original_tokens:
+        preservation_note = (
+            f"The optimized prompt is {optimized_tokens - original_tokens} tokens longer than the original "
+            f"({original_tokens} → {optimized_tokens}). This is expected for the Quality strategy, which adds "
+            "clarity, structure, and completeness. Use the Token strategy if you need a shorter result."
+        )
 
     return {
         "success": success,
@@ -387,6 +520,7 @@ def optimize_prompt(
         "response_time_ms": elapsed_ms,
         "error_code": error_code,
         "error_message": error_message,
+        "preservation_note": preservation_note,
     }
 
 

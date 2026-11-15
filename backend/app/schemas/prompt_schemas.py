@@ -95,6 +95,10 @@ class OptimizeRequest(BaseModel):
         default="quick",
         description="Optimization mode: quick (streamlined) or advanced (deep structure).",
     )
+    strategy: Literal["quality", "token"] = Field(
+        default="quality",
+        description="Explicit optimization strategy: 'quality' adds structure, 'token' minimizes token count.",
+    )
     optimization_instructions: Optional[str] = Field(
         default=None,
         max_length=2000,
@@ -129,6 +133,10 @@ class OptimizeResponse(BaseModel):
     reduction_percentage: float = Field(
         default=0.0,
         description="Percentage token reduction. Negative if prompt length expanded for clarity.",
+    )
+    preservation_note: Optional[str] = Field(
+        default=None,
+        description="Explanation why token count increased, only set for quality strategy when tokens rise.",
     )
     response_time_ms: int = Field(default=0, description="Execution time in milliseconds.")
     error_code: Optional[str] = Field(default=None, description="Safe error category if failed.")
