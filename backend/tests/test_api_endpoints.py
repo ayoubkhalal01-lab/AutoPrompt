@@ -342,6 +342,60 @@ class TestEndpointHandlers(unittest.TestCase):
         self.assertTrue(body["success"])
         self.assertEqual(body["token_count"], 42)
 
+    @patch("app.main.generate_prompt")
+    def test_generate_endpoint_with_language(self, mock_gen):
+        mock_gen.return_value = {
+            "success": True,
+            "model": "gemini-3-flash-preview",
+            "generated_prompt": "# Role\nExpert en Python...",
+            "input_tokens": 15,
+            "output_tokens": 120,
+            "response_time_ms": 500,
+            "error_code": None,
+            "error_message": None,
+        }
+        for lang in ["fr", "ar", "darija", "en"]:
+            req = GenerateRequest(user_idea="Écris un prompt pour analyser les données", language=lang)
+            resp = api_generate_prompt(req)
+            self.assertEqual(resp.status_code, 200)
+            mock_gen.assert_called_with(
+                user_idea="Écris un prompt pour analyser les données",
+                mode="quick",
+                category=None,
+                role=None,
+                objective=None,
+                context=None,
+                constraints=None,
+                output_format=None,
+                language=lang,
+            )
+
+    @patch("app.main.optimize_prompt")
+    def test_optimize_endpoint_with_language(self, mock_opt):
+        mock_opt.return_value = {
+            "success": True,
+            "model": "gemini-3-flash-preview",
+            "original_prompt": "Kteb liya code python mzyan",
+            "optimized_prompt": "Kteb code python mzyan w ndif",
+            "original_tokens": 6,
+            "optimized_tokens": 6,
+            "tokens_saved": 0,
+            "reduction_percentage": 0.0,
+            "response_time_ms": 200,
+            "error_code": None,
+            "error_message": None,
+        }
+        req = OptimizeRequest(original_prompt="Kteb liya code python mzyan", language="darija")
+        resp = api_optimize_prompt(req)
+        self.assertEqual(resp.status_code, 200)
+        mock_opt.assert_called_with(
+            original_prompt="Kteb liya code python mzyan",
+            mode="quick",
+            optimization_instructions=None,
+            strategy="intelligent",
+            language="darija",
+        )
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

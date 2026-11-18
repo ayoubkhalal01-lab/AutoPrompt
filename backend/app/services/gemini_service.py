@@ -51,6 +51,17 @@ _TEST_PROMPT = (
 )
 
 # ── System Instructions for AutoPrompt Operations ────────────────────────────
+_LANGUAGE_DIRECTIVE = """
+Language Rule (CRITICAL):
+- Detect the language of the user's input automatically (French, Standard Arabic, Moroccan Darija, English, etc.).
+- Always respond in the EXACT SAME language as the user's input:
+  * If the input is in French (Français) → generate/optimize the prompt entirely in French.
+  * If the input is in Standard Arabic (العربية الفصحى) → generate/optimize the prompt entirely in Standard Arabic.
+  * If the input is in Moroccan Darija (الدارجة المغربية, whether written in Arabic alphabet or Latin script/Arabizi) → generate/optimize in Moroccan Darija in the matching script.
+  * If the input is in English → generate/optimize the prompt in English.
+- If a specific language directive is provided (e.g., [Respond in language: ...]), honour it strictly regardless of the input language.
+- Never default to English when the user writes in French, Arabic, or Moroccan Darija."""
+
 GENERATE_SYSTEM_INSTRUCTION = """You are AutoPrompt's Prompt Generation Engine.
 Your task is to generate a comprehensive, production-ready, highly effective prompt based on the user's task or idea.
 The generated prompt must be directly usable as a prompt for an LLM and must include clear markdown sections:
@@ -61,7 +72,7 @@ The generated prompt must be directly usable as a prompt for an LLM and must inc
 - **Expected Output Format**: Concrete structure, code blocks, schema, tables, or sections expected.
 - **Constraints & Guardrails**: Boundaries, libraries, edge-cases, assumptions, and negative constraints.
 
-Do not include conversational preamble or closing remarks (such as 'Here is your prompt:'). Output the generated prompt directly."""
+Do not include conversational preamble or closing remarks (such as 'Here is your prompt:'). Output the generated prompt directly.""" + _LANGUAGE_DIRECTIVE
 
 OPTIMIZE_SYSTEM_INSTRUCTION = """You are AutoPrompt's Prompt Optimization Engine.
 Your task is to optimize an existing prompt for maximum effectiveness, clarity, and token efficiency while strictly preserving the user's original intent.
@@ -72,7 +83,7 @@ Core Guidelines:
 3. Eliminate Inefficiencies: Purge conversational filler, polite preambles, redundant restatements, and vague phrasing.
 4. Enhance Structure Appropriately: When a prompt is genuinely vague or underspecified, add necessary structure (concrete deliverables, constraints, or steps)—but remain token-economical.
 5. Do NOT Invent Unavailable Data: Do not assume specific dataset schemas, proprietary column names, or mock data not provided in the prompt.
-6. Direct Output: Output only the optimized prompt. Never include conversational preamble (such as 'Here is the optimized prompt:') or closing remarks."""
+6. Direct Output: Output only the optimized prompt. Never include conversational preamble (such as 'Here is the optimized prompt:') or closing remarks.""" + _LANGUAGE_DIRECTIVE
 
 # System instruction used for the QUALITY strategy (may add structure)
 QUALITY_SYSTEM_INSTRUCTION = OPTIMIZE_SYSTEM_INSTRUCTION
@@ -87,7 +98,7 @@ Rules:
 3. Merge bullet-point lists into comma-separated inline text wherever the meaning is unchanged.
 4. Remove redundant restatements of the same constraint or instruction.
 5. PRESERVE every technical constraint verbatim (lines containing: must, must not, should not, do not, limit, maximum, minimum, required, constraint, latency, threshold).
-6. Direct Output: Output only the reduced prompt. No preamble, no explanation."""
+6. Direct Output: Output only the reduced prompt. No preamble, no explanation.""" + _LANGUAGE_DIRECTIVE
 
 
 # ── Token-Optimization Helper (rule-based, no LLM) ───────────────────────────
@@ -358,6 +369,7 @@ def generate_prompt(
     constraints: str | None = None,
     output_format: str | None = None,
     temperature: float | None = None,
+    language: str | None = None,
 ) -> dict[str, Any]:
     """
     Generate a complete, structured prompt from a user idea/task.
@@ -395,6 +407,10 @@ def generate_prompt(
     else:
         user_content = f"Category: {category}\nTask: {user_idea}" if category else user_idea
 
+    # Inject explicit language hint when provided
+    if language:
+        user_content = f"[Respond in language: {language}]\n\n{user_content}"
+
     input_tokens = count_tokens(user_content)
 
     success, normalized_prompt, elapsed_ms, error_code, error_message = _execute_ai_request(
@@ -424,6 +440,7 @@ def optimize_prompt(
     optimization_instructions: str | None = None,
     temperature: float | None = None,
     strategy: str = "quality",
+    language: str | None = None,
 ) -> dict[str, Any]:
     """
     Optimize an existing user prompt.
@@ -456,6 +473,9 @@ def optimize_prompt(
 
     original_tokens = count_tokens(original_prompt)
 
+    # Build a language prefix to inject into the user content when language is explicit
+    lang_prefix = f"[Respond in language: {language}]\n\n" if language else ""
+
     if strategy == "token":
         # ── Token strategy: rule-based reduction ──────────────────────────────
         optimized_text = _token_optimize(original_prompt)
@@ -463,7 +483,7 @@ def optimize_prompt(
         # If custom instructions were provided, honour them with a focused LLM pass
         if optimization_instructions:
             user_content = (
-                f"Prompt to further minimise:\n{optimized_text}\n\n"
+                f"{lang_prefix}Prompt to further minimise:\n{optimized_text}\n\n"
                 f"Additional directives:\n{optimization_instructions}"
             )
             success, optimized_text, elapsed_ms, error_code, error_message = _execute_ai_request(
@@ -479,11 +499,11 @@ def optimize_prompt(
         # ── Quality strategy: full LLM pass (existing behaviour) ─────────────
         if optimization_instructions:
             user_content = (
-                f"Prompt to optimize:\n{original_prompt}\n\n"
+                f"{lang_prefix}Prompt to optimize:\n{original_prompt}\n\n"
                 f"Specific Focus Directives:\n{optimization_instructions}"
             )
         else:
-            user_content = original_prompt
+            user_content = f"{lang_prefix}{original_prompt}" if lang_prefix else original_prompt
 
         success, optimized_text, elapsed_ms, error_code, error_message = _execute_ai_request(
             operation="optimize",

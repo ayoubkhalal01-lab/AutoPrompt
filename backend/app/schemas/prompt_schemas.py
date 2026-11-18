@@ -57,6 +57,11 @@ class GenerateRequest(BaseModel):
         description="Optional expected output format (advanced mode).",
         examples=["Modular Python code and a markdown comparison table."],
     )
+    language: Optional[str] = Field(
+        default=None,
+        max_length=20,
+        description="Language code for the response (e.g. 'fr', 'ar', 'darija'). Auto-detected from input when omitted.",
+    )
 
     @field_validator("user_idea")
     @classmethod
@@ -95,15 +100,20 @@ class OptimizeRequest(BaseModel):
         default="quick",
         description="Optimization mode: quick (streamlined) or advanced (deep structure).",
     )
-    strategy: Literal["quality", "token"] = Field(
-        default="quality",
-        description="Explicit optimization strategy: 'quality' adds structure, 'token' minimizes token count.",
+    strategy: Optional[str] = Field(
+        default="intelligent",
+        description="Optimization strategy: 'intelligent' (unified quality + token reduction), 'quality', or 'token'.",
     )
     optimization_instructions: Optional[str] = Field(
         default=None,
         max_length=2000,
         description="Optional custom refinement instructions.",
         examples=["Focus on technical precision and eliminate all fluff."],
+    )
+    language: Optional[str] = Field(
+        default=None,
+        max_length=20,
+        description="Language code for the response (e.g. 'fr', 'ar', 'darija'). Auto-detected from input when omitted.",
     )
 
     @field_validator("original_prompt")
@@ -132,11 +142,23 @@ class OptimizeResponse(BaseModel):
     )
     reduction_percentage: float = Field(
         default=0.0,
-        description="Percentage token reduction. Negative if prompt length expanded for clarity.",
+        description="Percentage token reduction: ((original_tokens - optimized_tokens) / original_tokens) * 100.",
+    )
+    quality_improvements: list[str] = Field(
+        default_factory=list,
+        description="List of specific quality and clarity improvements made.",
+    )
+    preservation_status: str = Field(
+        default="verified",
+        description="Validation status of constraint, numerical, and prohibition preservation ('verified' or 'warning').",
+    )
+    explanation: Optional[str] = Field(
+        default=None,
+        description="Detailed explanation of optimizations, token impact, and reasoning.",
     )
     preservation_note: Optional[str] = Field(
         default=None,
-        description="Explanation why token count increased, only set for quality strategy when tokens rise.",
+        description="Backwards-compatible explanation when token count expands for clarity.",
     )
     response_time_ms: int = Field(default=0, description="Execution time in milliseconds.")
     error_code: Optional[str] = Field(default=None, description="Safe error category if failed.")

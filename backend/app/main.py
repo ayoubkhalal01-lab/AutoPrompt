@@ -191,16 +191,19 @@ def api_generate_prompt(
     payload: GenerateRequest,
     db: Session = Depends(get_db),
 ) -> JSONResponse:
-    result = generate_prompt(
-        user_idea=payload.user_idea,
-        mode=payload.mode,
-        category=payload.category,
-        role=payload.role,
-        objective=payload.objective,
-        context=payload.context,
-        constraints=payload.constraints,
-        output_format=payload.output_format,
-    )
+    kwargs = {
+        "user_idea": payload.user_idea,
+        "mode": payload.mode,
+        "category": payload.category,
+        "role": payload.role,
+        "objective": payload.objective,
+        "context": payload.context,
+        "constraints": payload.constraints,
+        "output_format": payload.output_format,
+    }
+    if payload.language is not None:
+        kwargs["language"] = payload.language
+    result = generate_prompt(**kwargs)
 
     # Automatically record in history on success
     if result.get("success"):
@@ -236,12 +239,15 @@ def api_optimize_prompt(
     payload: OptimizeRequest,
     db: Session = Depends(get_db),
 ) -> JSONResponse:
-    result = optimize_prompt(
-        original_prompt=payload.original_prompt,
-        mode=payload.mode,
-        optimization_instructions=payload.optimization_instructions,
-        strategy=payload.strategy,
-    )
+    kwargs = {
+        "original_prompt": payload.original_prompt,
+        "mode": payload.mode,
+        "optimization_instructions": payload.optimization_instructions,
+        "strategy": payload.strategy,
+    }
+    if payload.language is not None:
+        kwargs["language"] = payload.language
+    result = optimize_prompt(**kwargs)
 
     # Automatically record in history on success
     if result.get("success"):

@@ -1000,6 +1000,12 @@
         category: (this.elements.promptCategory && this.elements.promptCategory.value) || null
       };
 
+      var langSelect = this.elements.langSelect || document.getElementById('lang-select');
+      var selectedLang = langSelect ? langSelect.value : null;
+      if (selectedLang && selectedLang !== 'auto') {
+        payload.language = selectedLang;
+      }
+
       // Include advanced fields when in advanced mode
       if (this.activeModeGenerate === MODE_ADVANCED) {
         var role = this.elements.advRole ? this.elements.advRole.value.trim() : '';
@@ -1054,6 +1060,12 @@
         mode: optMode,
         strategy: optStrategy
       };
+
+      var langSelect = this.elements.langSelect || document.getElementById('lang-select');
+      var selectedLang = langSelect ? langSelect.value : null;
+      if (selectedLang && selectedLang !== 'auto') {
+        payload.language = selectedLang;
+      }
 
       // Include custom optimization instructions when in advanced mode
       if (optMode === MODE_ADVANCED && this.elements.advOptimizeInstructions) {
