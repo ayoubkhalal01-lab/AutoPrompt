@@ -1,0 +1,13 @@
+{
+  "name": "autoprompt",
+  "version": "1.0.0",
+  "description": "AutoPrompt - Turn your ideas into better prompts",
+  "private": true,
+  "scripts": {
+    "dev": "echo 'No build step needed for static site'",
+    "build": "echo 'No build step needed for static site'"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^1.4.1"
+  }
+}
